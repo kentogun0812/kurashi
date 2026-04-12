@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "skills": {
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "43ca6c197f8ec13055079da7053232d477068b03ca443f9ac1bc819b95cdd432"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "41d24eafa7c3d82e270439808f7cfbc4d51aeb2d14f2809a2267c16275784d06"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "c8952fc9127fa0564d0cb71dccb4215a5608ac933b5831104f09173a97a46f85"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    },
+    "spec-driven-development": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/refs/heads/main/skills/spec-driven-development/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "8d0eb733083f0769e3bbca94477ee69e23e3bd4afa626b166ef3999cad9b1dc8"
+    },
+    "performance-optimization": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/main/skills/performance-optimization/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "ea55bae2b08bfcfa1cb559313f4c3edabd0b2ec88a8576e1c4ed47010130ff3a"
+    },
+    "security-and-hardening": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/main/skills/security-and-hardening/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "8d79177a1577eb87cffb779cafcf49377de36300797044c1d998eadec2f2af30"
+    },
+    "code-review-and-quality": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/main/skills/code-review-and-quality/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "ec882771a37c9b0ead909326becbe5cc46fa5c1c9a6a155f87495a606158d029"
+    },
+    "debugging-and-error-recovery": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/main/skills/debugging-and-error-recovery/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "25f1eabe9c72c2b7663966b58a43287e0c7fe3375a1749c8c63d2fad1663a8b7"
+    },
+    "browser-testing-with-devtools": {
+      "source": "https://raw.githubusercontent.com/addyosmani/agent-skills/main/skills/browser-testing-with-devtools/SKILL.md",
+      "sourceType": "url",
+      "computedHash": "da5f980890c19cf4571908ae67f074972c70cc9e41d727b75a606774e6a6fcb7"
+    }
+  }
+}
