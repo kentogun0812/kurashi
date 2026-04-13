@@ -1,19 +1,19 @@
-# Tài Liệu Phân Tích Nghiệp Vụ (Business Analysis Document) - Dự án Nihonseikatsu
+# Tài Liệu Phân Tích Nghiệp Vụ (Business Analysis Document) - Dự án Kurashi
 
 **Ngày cập nhật:** 12/04/2026
-**Dự án:** Nihonseikatsu
+**Dự án:** Kurashi
 **Loại hình:** Web Single Page Application (SPA)
 
 ---
 
 ## 1. Tóm tắt điều hành (Executive Summary)
 
-**Nihonseikatsu** là dự án phát triển Web Single Page Application (SPA) nhằm xây dựng một hệ sinh thái toàn diện dành riêng cho cộng đồng người Việt Nam đang sống, làm việc và học tập tại Nhật Bản. Sứ mệnh của dự án là trở thành "cầu nối" đắc lực, hỗ trợ người dùng vượt qua rào cản ngôn ngữ và văn hóa thông qua 3 trụ cột chính:
+**Kurashi** là dự án phát triển Web Single Page Application (SPA) nhằm xây dựng một hệ sinh thái toàn diện dành riêng cho cộng đồng người Việt Nam đang sống, làm việc và học tập tại Nhật Bản. Sứ mệnh của dự án là trở thành "cầu nối" đắc lực, hỗ trợ người dùng vượt qua rào cản ngôn ngữ và văn hóa thông qua 3 trụ cột chính:
 1. Cung cấp thông tin và hướng dẫn thủ tục hành chính chính xác, ứng dụng AI.
 2. Xây dựng không gian kết nối cộng đồng và theo dõi sự kiện địa phương.
 3. Nền tảng chia sẻ, mua bán và trao đổi đồ cũ giữa những người dùng an toàn, tiện lợi.
 
-Với định hướng phát triển tối ưu cho thiết bị di động (Mobile-first) và ứng dụng mạnh mẽ Cloud AI, Nihonseikatsu kỳ vọng sẽ tạo ra những trải nghiệm mượt mà, tiện ích và gắn kết sâu sắc cộng đồng người Việt tại Nhật.
+Với định hướng phát triển tối ưu cho thiết bị di động (Mobile-first) và ứng dụng mạnh mẽ Cloud AI, Kurashi kỳ vọng sẽ tạo ra những trải nghiệm mượt mà, tiện ích và gắn kết sâu sắc cộng đồng người Việt tại Nhật.
 
 ---
 
@@ -106,4 +106,4 @@ Với các yêu cầu về hiệu năng, SEO, và AI, sau đây là kiến trúc
 | **R4: Thiếu hụt User Retention (Tỉ lệ giữ chân thấp)**<br/>(Hoàn thành thủ tục xong người dùng không quay lại). | Trung bình | Cao | - Cross-sell các tính năng: Đẩy mạnh Notification về sự kiện sắp diễn ra, chợ đồ cũ theo sở thích cá nhân.<br/>- Cập nhật thông tin hữu ích và xu hướng đời sống liên tục ở bảng tin. |
 
 ---
-*Tài liệu được thiết kế riêng cho dự án Nihonseikatsu.*
+*Tài liệu được thiết kế riêng cho dự án Kurashi.*

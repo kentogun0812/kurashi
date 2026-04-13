@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "events": "Sự kiện",
+    "marketplace": "Chợ đồ cũ",
+    "procedures": "Thủ tục",
+    "login": "Đăng nhập",
+    "getStarted": "Bắt đầu",
+    "details": "Chi tiết",
+    "profile": "Hồ sơ cá nhân",
+    "logout": "Đăng xuất",
+    "settings": "Cài đặt",
+    "loggingOut": "Đang đăng xuất..."
+  },
+  "metadata": {
+    "title": "Kurashi | Hệ sinh thái cộng đồng Việt tại Nhật",
+    "description": "Cung cấp thông tin hành chính, sự kiện và chợ đồ cũ cho người Việt đang sinh sống tại Nhật Bản."
+  },
+  "home": {
+    "greeting": "Chào buổi sáng, Dũng! 👋",
+    "subGreeting": "Hôm nay bạn cần hỗ trợ thông tin gì tại Nhật Bản?",
+    "aiSearchPlaceholder": "Hỏi AI: Xin thủ tục chuyển nhà...",
+    "sections": {
+      "procedures": "Thủ tục Phổ biến",
+      "events": "Sự kiện Nổi bật",
+      "tips": "Mẹo hay cuộc sống",
+      "marketplace": "Dọn nhà tiết kiệm"
+    },
+    "viewAll": "Xem tất cả",
+    "explore": "Khám phá",
+    "marketplaceTitle": "Dọn nhà tiết kiệm",
+    "marketplaceBadge": "MỚI",
+    "marketplaceDesc": "Bạn có đồ dùng còn tốt muốn thanh lý cho cộng đồng trước khi về nước?",
+    "marketplaceButton": "Đăng món đồ đầu tiên",
+    "proceduresItems": {
+      "visa": {
+        "title": "Gia hạn Visa Kỹ sư",
+        "desc": "Quy trình mới nhất năm 2026 cập nhật..."
+      },
+      "move": {
+        "title": "Thủ tục chuyển nhà",
+        "desc": "Hướng dẫn Tenshutsu & Tennyu"
+      },
+      "quit": {
+        "title": "Xin nghỉ việc an toàn",
+        "desc": "Quy trình báo trước 1 tháng với công ty"
+      },
+      "marriage": {
+        "title": "Đăng ký kết hôn",
+        "desc": "Pháp lý tại Đại sứ quán VN tại Nhật"
+      }
+    },
+    "tipsItems": [
+      {
+        "title": "Tiết kiệm tiền điện mùa đông",
+        "desc": "Hướng dẫn sử dụng điều hòa tiết kiệm tại Nhật."
+      },
+      {
+        "title": "Phân loại rác đúng cách",
+        "desc": "Lưu ý rác cháy được và không cháy được theo khu vực."
+      },
+      {
+        "title": "Ứng dụng cần có",
+        "desc": "Top 5 ứng dụng chuyển nhà, tìm đồ rẻ ở Nhật."
+      },
+      {
+        "title": "Mua vé tàu siêu tốc",
+        "desc": "Mẹo mua Seishun 18 Kippu khi đi du lịch xa."
+      }
+    ]
+  },
+  "events": {
+    "title": "Khám phá",
+    "titleHighlight": "Sự kiện",
+    "description": "Tìm kiếm và tham gia những sự kiện hấp dẫn dành riêng cho cộng đồng người Việt đang sinh sống tại Nhật Bản. Kết nối với những người bạn mới!",
+    "searchPlaceholder": "Tìm kiếm sự kiện, hội thảo...",
+    "allRegions": "Tất cả khu vực",
+    "createEvent": "Tạo sự kiện",
+    "filter": "Bộ lọc",
+    "loadMore": "Xem thêm sự kiện",
+    "showCount": "Đã hiển thị {count} sự kiện",
+    "attendees": "{count} người sẽ tham gia",
+    "new": "MỚI",
+    "categories": {
+      "all": "Tất cả",
+      "festival": "Lễ hội",
+      "job": "Việc làm",
+      "sports": "Thể thao",
+      "exchange": "Giao lưu",
+      "workshop": "Hội thảo",
+      "academic": "Học thuật",
+      "other": "Khác"
+    },
+    "regions": {
+      "all": "Tất cả khu vực",
+      "kanto": "Kanto (Tokyo...)",
+      "kansai": "Kansai (Osaka...)",
+      "kyushu": "Kyushu",
+      "hokkaido": "Hokkaido"
+    }
+  },
+  "common": {
+    "language": "Ngôn ngữ"
+  },
+  "footer": {
+    "slogan": "Hệ sinh thái thông tin hành chính, kết nối cộng đồng và giao thương đồ cũ hàng đầu cho người Việt tại Nhật Bản.",
+    "features": "Tính năng",
+    "support": "Hỗ trợ",
+    "contact": "Liên hệ",
+    "madeWith": "Được xây dựng với tâm huyết dành cho cộng đồng người Việt tại Nhật Bản."
+  },
+  "notFound": {
+    "title": "Trang không tồn tại",
+    "description": "Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đang trong quá trình phát triển.",
+    "goHome": "Quay lại trang chủ"
+  },
+  "profile": {
+    "title": "Thông tin cá nhân",
+    "emailLabel": "Email (Không thể thay đổi)",
+    "nameLabel": "Tên hiển thị (Nickname)",
+    "namePlaceholder": "Nhập tên hiển thị của bạn",
+    "avatarTitle": "Ảnh đại diện",
+    "avatarDesc": "Chọn một avatar ngẫu nhiên từ kho ảnh hệ thống, hoặc tải ảnh lên:",
+    "avatarUploadBtn": "Tải ảnh từ máy",
+    "securityTitle": "Bảo mật",
+    "securityDesc": "Để trống nếu bạn không muốn thay đổi mật khẩu.",
+    "pwdLabel": "Mật khẩu mới",
+    "pwdConfirmLabel": "Xác nhận mật khẩu mới",
+    "saveBtn": "Lưu thay đổi",
+    "savingBtn": "Đang lưu...",
+    "updateSuccess": "Cập nhật thông tin thành công!",
+    "pwdMismatch": "Mật khẩu mới không khớp.",
+    "uploadError": "Lỗi tải ảnh. Vui lòng thử lại.",
+    "systemError": "Lỗi hệ thống, vui lòng thử lại."
+  }
+}

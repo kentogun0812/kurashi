@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "events": "Events",
+    "marketplace": "Marketplace",
+    "procedures": "Procedures",
+    "login": "Login",
+    "getStarted": "Get Started",
+    "details": "Details",
+    "profile": "My Profile",
+    "logout": "Logout",
+    "settings": "Settings",
+    "loggingOut": "Logging out..."
+  },
+  "metadata": {
+    "title": "  Kurashi | Vietnamese Community Ecosystem in Japan",
+    "description": "Providing administrative info, events, and C2C marketplace for Vietnamese living in Japan."
+  },
+  "home": {
+    "greeting": "Good morning, Dung! 👋",
+    "subGreeting": "How can we help you today in Japan?",
+    "aiSearchPlaceholder": "Ask AI: Moving procedures...",
+    "sections": {
+      "procedures": "Popular Procedures",
+      "events": "Featured Events",
+      "tips": "Life Tips",
+      "marketplace": "Save on Moving"
+    },
+    "viewAll": "View all",
+    "explore": "Explore",
+    "marketplaceTitle": "Save on Moving",
+    "marketplaceBadge": "NEW",
+    "marketplaceDesc": "Have quality items to sell to the community before leaving Japan?",
+    "marketplaceButton": "Post your first item",
+    "proceduresItems": {
+      "visa": {
+        "title": "Engineer Visa Extension",
+        "desc": "Latest 2026 process updates..."
+      },
+      "move": {
+        "title": "Moving Procedures",
+        "desc": "Tenshutsu & Tennyu guidance"
+      },
+      "quit": {
+        "title": "Safe Resignation",
+        "desc": "1-month notice process with company"
+      },
+      "marriage": {
+        "title": "Marriage Registration",
+        "desc": "Legal info at VN Embassy in Japan"
+      }
+    },
+    "tipsItems": [
+      {
+        "title": "Winter Electricity Savings",
+        "desc": "Guide to saving on AC usage in Japan."
+      },
+      {
+        "title": "Correct Waste Sorting",
+        "desc": "Note on burnable/non-burnable by region."
+      },
+      {
+        "title": "Must-have Apps",
+        "desc": "Top 5 apps for moving and finding cheap deals."
+      },
+      {
+        "title": "Buy Shinkansen Tickets",
+        "desc": "Tips for Seishun 18 Kippu during travel."
+      }
+    ]
+  },
+  "events": {
+    "title": "Discover",
+    "titleHighlight": "Events",
+    "description": "Find and join exciting events for the Vietnamese community in Japan. Connect with new friends!",
+    "searchPlaceholder": "Search events, workshops...",
+    "allRegions": "All regions",
+    "createEvent": "Create event",
+    "filter": "Filter",
+    "loadMore": "Load more events",
+    "showCount": "Showing {count} events",
+    "attendees": "{count} will attend",
+    "new": "NEW",
+    "categories": {
+      "all": "All",
+      "festival": "Festival",
+      "job": "Jobs",
+      "sports": "Sports",
+      "exchange": "Exchange",
+      "workshop": "Workshop",
+      "academic": "Academic",
+      "other": "Other"
+    },
+    "regions": {
+      "all": "All regions",
+      "kanto": "Kanto (Tokyo...)",
+      "kansai": "Kansai (Osaka...)",
+      "kyushu": "Kyushu",
+      "hokkaido": "Hokkaido"
+    }
+  },
+  "common": {
+    "language": "Language"
+  },
+  "footer": {
+    "slogan": "The leading ecosystem for administrative information, community connection, and C2C marketplace for Vietnamese in Japan.",
+    "features": "Features",
+    "support": "Support",
+    "contact": "Contact",
+    "madeWith": "Made with passion for the Vietnamese community in Japan."
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for doesn't exist or is under development.",
+    "goHome": "Go back home"
+  },
+  "profile": {
+    "title": "Personal Information",
+    "emailLabel": "Email (Cannot be changed)",
+    "nameLabel": "Display Name (Nickname)",
+    "namePlaceholder": "Enter your display name",
+    "avatarTitle": "Profile Picture",
+    "avatarDesc": "Choose random avatar or upload:",
+    "avatarUploadBtn": "Upload from device",
+    "securityTitle": "Security",
+    "securityDesc": "Leave blank to keep your current password.",
+    "pwdLabel": "New Password",
+    "pwdConfirmLabel": "Confirm Password",
+    "saveBtn": "Save Changes",
+    "savingBtn": "Saving...",
+    "updateSuccess": "Profile updated successfully!",
+    "pwdMismatch": "Passwords do not match.",
+    "uploadError": "Upload failed. Try again.",
+    "systemError": "System error, please try again."
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "events": "イベント",
+    "marketplace": "フリマ",
+    "procedures": "手続き",
+    "login": "ログイン",
+    "getStarted": "始める",
+    "details": "詳細",
+    "profile": "プロフィール",
+    "logout": "ログアウト",
+    "settings": "設定",
+    "loggingOut": "ログアウト中..."
+  },
+  "metadata": {
+    "title": "Kurashi | 在日ベトナム人コミュニティ・エコシステム",
+    "description": "日本に住むベトナム人のために、行政情報、イベント、C2Cフリーマーケットを提供します。"
+  },
+  "home": {
+    "greeting": "おはようございます、ズンさん！ 👋",
+    "subGreeting": "今日は日本での生活でどのようなサポートが必要ですか？",
+    "aiSearchPlaceholder": "AIに聞く：引っ越しの手続き...",
+    "sections": {
+      "procedures": "人気の続き",
+      "events": "注目のイベント",
+      "tips": "生活の知恵",
+      "marketplace": "引っ越し節約"
+    },
+    "viewAll": "すべて見る",
+    "explore": "探す",
+    "marketplaceTitle": "引っ越し節約",
+    "marketplaceBadge": "新規",
+    "marketplaceDesc": "帰国前にコミュニティに売りたい良質な品物はありませんか？",
+    "marketplaceButton": "最初の品物を出品する",
+    "proceduresItems": {
+      "visa": {
+        "title": "技術ビザ更新",
+        "desc": "2026年最新プロセスの更新..."
+      },
+      "move": {
+        "title": "引っ越し手続き",
+        "desc": "転出・転入のガイド"
+      },
+      "quit": {
+        "title": "安全な退職",
+        "desc": "会社への1ヶ月前の通知プロセス"
+      },
+      "marriage": {
+        "title": "婚姻届",
+        "desc": "在日ベトナム大使館での法的情報"
+      }
+    },
+    "tipsItems": [
+      {
+        "title": "冬の電気代節約",
+        "desc": "日本でのエアコン節約使用ガイド。"
+      },
+      {
+        "title": "正しいゴミ分別",
+        "desc": "地域別の燃えるゴミ・燃えないゴミの注意点。"
+      },
+      {
+        "title": "必須アプリ",
+        "desc": "引っ越しや格安情報を見つけるためのトップ5アプリ。"
+      },
+      {
+        "title": "新幹線のチケット購入",
+        "desc": "旅行中の青春18きっぷのコツ。"
+      }
+    ]
+  },
+  "events": {
+    "title": "見つける",
+    "titleHighlight": "イベント",
+    "description": "日本に住むベトナム人コミュニティのための魅力的なイベントを検索して参加しましょう。新しい友達と繋がりましょう！",
+    "searchPlaceholder": "イベント、ワークショップを検索...",
+    "allRegions": "すべての地域",
+    "createEvent": "イベントを作成",
+    "filter": "フィルター",
+    "loadMore": "もっと見る",
+    "showCount": "{count}件のイベントを表示中",
+    "attendees": "{count}人が参加予定",
+    "new": "新規",
+    "categories": {
+      "all": "すべて",
+      "festival": "お祭り",
+      "job": "仕事",
+      "sports": "スポーツ",
+      "exchange": "交流",
+      "workshop": "ワークショップ",
+      "academic": "学術",
+      "other": "その他"
+    },
+    "regions": {
+      "all": "すべての地域",
+      "kanto": "関東 (東京...)",
+      "kansai": "関西 (大阪...)",
+      "kyushu": "九州",
+      "hokkaido": "北海道"
+    }
+  },
+  "common": {
+    "language": "言語"
+  },
+  "footer": {
+    "slogan": "日本に住むベトナム人のための、行政情報、コミュニティ接続、C2Cフリーマーケットの主要なエコシステムです。",
+    "features": "機能",
+    "support": "サポート",
+    "contact": "お問い合わせ",
+    "madeWith": "日本に住むベトナム人コミュニティのために、情熱を持って作られました。"
+  },
+  "notFound": {
+    "title": "ページが見つかりません",
+    "description": "申し訳ありませんが、お探しのページは存在しないか、現在開発中です。",
+    "goHome": "ホームに戻る"
+  },
+  "profile": {
+    "title": "個人情報",
+    "emailLabel": "メールアドレス（変更不可）",
+    "nameLabel": "表示名（ニックネーム）",
+    "namePlaceholder": "表示名を入力してください",
+    "avatarTitle": "プロフィール画像",
+    "avatarDesc": "システム画像を選ぶかアップロード：",
+    "avatarUploadBtn": "端末からアップロード",
+    "securityTitle": "セキュリティ",
+    "securityDesc": "パスワードを変更しない場合は空白に。",
+    "pwdLabel": "新しいパスワード",
+    "pwdConfirmLabel": "新しいパスワード（確認）",
+    "saveBtn": "変更を保存",
+    "savingBtn": "保存中...",
+    "updateSuccess": "プロフィールの更新に成功しました！",
+    "pwdMismatch": "パスワードが一致しません。",
+    "uploadError": "アップロード失敗。再試行してください。",
+    "systemError": "システムエラー。再試行してください。"
+  }
+}

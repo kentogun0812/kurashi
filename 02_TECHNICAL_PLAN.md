@@ -1,7 +1,7 @@
-# Tài Liệu Kế Hoạch Kỹ Thuật (Technical Plan & Architecture) - Dự án Nihonseikatsu
+# Tài Liệu Kế Hoạch Kỹ Thuật (Technical Plan & Architecture) - Dự án Kurashi
 
 **Ngày cập nhật:** 12/04/2026
-**Dự án:** Nihonseikatsu
+**Dự án:** Kurashi
 **Tham chiếu:** `01_BUSINESS_ANALYSIS.md`
 
 ---
