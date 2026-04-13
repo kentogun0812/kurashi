@@ -96,7 +96,8 @@
       "kansai": "関西 (大阪...)",
       "kyushu": "九州",
       "hokkaido": "北海道"
-    }
+    },
+    "loading": "読み込み中..."
   },
   "common": {
     "language": "言語"

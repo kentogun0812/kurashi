@@ -34,7 +34,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 pt-12 pb-8 md:pt-16 md:pb-12 max-w-7xl">
       {/* 1. Header: Greeting & AI Search */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 bg-gradient-to-br from-card to-background p-6 md:p-8 rounded-3xl border border-border/60 shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] rounded-full -mr-20 -mt-20 pointer-events-none" />

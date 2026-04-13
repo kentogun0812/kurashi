@@ -53,7 +53,7 @@ export default async function LocaleLayout({
       <body className={`${outfit.variable} font-sans min-h-screen bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary transition-colors flex flex-col`}>
         <NextIntlClientProvider messages={messages}>
           <Navbar />
-          <main className="flex-1 pt-20 md:pt-24 pb-12">
+          <main className="flex-1 pt-[50px] md:pt-[60px] pb-12">
             {children}
           </main>
           <Footer />

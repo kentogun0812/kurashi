@@ -87,19 +87,26 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       {isLoggingOut && (
         <FullScreenLoading message={t('loggingOut')} />
       )}
 
-      <nav
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b",
-          isScrolled 
-            ? "bg-background/95 backdrop-blur-xl border-border shadow-lg py-4" 
-            : "bg-background/60 backdrop-blur-md border-border/40 shadow-sm py-4"
-        )}
+      <header
+        className="fixed top-0 left-0 right-0 z-[100] bg-background/95 backdrop-blur-xl border-b border-border shadow-sm py-3 md:py-4 transition-all"
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between">
@@ -117,7 +124,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-6 lg:gap-8">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname === link.href;
@@ -202,7 +209,7 @@ export function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <div
@@ -224,34 +231,40 @@ export function Navbar() {
               </div>
               <span className="text-xl font-bold text-gradient">Kurashi</span>
             </Link>
-            <div className="flex items-center gap-2">
-              <LanguageSwitcher />
-              <button
-                className="p-2 text-foreground"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <X size={24} />
-              </button>
-            </div>
+            <button
+              className="p-2 text-foreground"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <X size={24} />
+            </button>
           </div>
           
-          <div className="flex-1 flex flex-col p-6 gap-4 overflow-y-auto">
+          <div className="flex-1 flex flex-col p-6 gap-3 overflow-y-auto">
             {navLinks.map((link) => {
               const Icon = link.icon;
+              const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.id}
                   href={link.href as any}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-secondary/50 hover:bg-secondary transition-colors"
+                  className={cn(
+                    "flex items-center justify-between p-4 rounded-2xl transition-all active:scale-[0.98]",
+                    isActive 
+                      ? "bg-primary/10 text-primary border border-primary/20" 
+                      : "bg-secondary/40 hover:bg-secondary/60 text-foreground border border-transparent"
+                  )}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center",
+                      isActive ? "bg-primary text-white" : "bg-primary/10 text-primary"
+                    )}>
                       <Icon size={20} />
                     </div>
-                    <span className="font-semibold text-lg">{link.name}</span>
+                    <span className="font-bold text-lg">{link.name}</span>
                   </div>
-                  <ChevronRight size={20} className="text-muted-foreground" />
+                  <ChevronRight size={18} className={cn("transition-transform", isActive ? "translate-x-1" : "opacity-50")} />
                 </Link>
               );
             })}

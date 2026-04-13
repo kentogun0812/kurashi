@@ -78,13 +78,13 @@ export default async function EventsPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
       {/* Page Header */}
-      <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">
+      <div className="mb-8 md:mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3 md:mb-4 text-foreground text-balance">
           {t('title')} <span className="text-primary text-gradient">{t('titleHighlight')}</span>
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl">
+        <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
           {t('description')}
         </p>
       </div>

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { Loader2 } from "lucide-react";
+import { FullScreenLoading } from "@/components/ui/full-screen-loading";
 
 export function EventCategories() {
   const t = useTranslations('events');
@@ -44,12 +45,7 @@ export function EventCategories() {
   return (
     <>
       {isPending && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-[2px]">
-           <div className="flex flex-col items-center bg-card p-6 rounded-2xl shadow-2xl border border-border">
-              <Loader2 className="h-10 w-10 animate-spin text-primary mb-3" />
-              <p className="font-semibold text-foreground">Đang tải danh mục...</p>
-           </div>
-        </div>
+        <FullScreenLoading message={t('loading')} />
       )}
       <div className="flex overflow-x-auto gap-3 pb-4 mb-8 scrollbar-hide relative z-10">
       {categories.map((cat) => {

@@ -9,6 +9,7 @@ import { useCallback, useState, useEffect, useTransition, useRef } from "react";
 import { EventForm } from "@/components/events/EventForm";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
+import { FullScreenLoading } from "@/components/ui/full-screen-loading";
 
 interface Region {
   id: string;
@@ -60,7 +61,16 @@ export function EventsFilterBar() {
     async function fetchRegions() {
       setIsDictLoading(true);
       const supabase = createClient();
-      const { data } = await supabase.from('regions').select('*').order('type', { ascending: false }); // region then prefecture
+      const { data, error } = await supabase
+        .from('regions')
+        .select('*')
+        .order('type', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching regions:', error.message);
+        setIsDictLoading(false);
+        return;
+      }
       
       if (data) {
         const hierarchy: RegionHierarchy = {};
@@ -167,15 +177,10 @@ export function EventsFilterBar() {
   return (
     <>
       {isPending && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-[2px]">
-           <div className="flex flex-col items-center bg-card p-6 rounded-2xl shadow-2xl border border-border">
-              <Loader2 className="h-10 w-10 animate-spin text-primary mb-3" />
-              <p className="font-semibold text-foreground">Đang tải dữ liệu...</p>
-           </div>
-        </div>
+        <FullScreenLoading message={t('loading')} />
       )}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 p-4 mb-10 bg-card/40 backdrop-blur-md rounded-3xl border border-border/50 relative z-10">
-        <form onSubmit={handleSearch} className="flex w-full lg:w-2/3 items-center gap-3">
+      <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 p-4 md:p-5 mb-8 md:mb-10 bg-card/40 backdrop-blur-md rounded-2xl md:rounded-3xl border border-border/50 relative z-40">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row w-full lg:w-2/3 items-stretch sm:items-center gap-3">
           <div className="relative w-full">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
             <Input 
@@ -183,16 +188,16 @@ export function EventsFilterBar() {
               placeholder={t('searchPlaceholder')} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 bg-background/50 border-border/50 rounded-2xl h-12 text-md w-full"
+              className="pl-12 bg-background/50 border-border/50 rounded-xl md:rounded-2xl h-12 text-base w-full"
             />
           </div>
           
           {/* Custom Region Dropdown */}
-          <div className="relative hidden md:block w-64 shrink-0" ref={dropdownRef}>
+          <div className="relative w-full sm:w-64 shrink-0" ref={dropdownRef}>
             <button 
               type="button" 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full flex items-center justify-between pl-12 pr-4 py-3 bg-background/50 border border-border/50 rounded-2xl h-12 text-sm text-foreground hover:bg-background/80 transition-colors outline-none focus:ring-2 focus:ring-ring"
+              className="w-full flex items-center justify-between pl-12 pr-4 bg-background/50 border border-border/50 rounded-xl md:rounded-2xl h-12 text-sm text-foreground hover:bg-background/80 transition-colors outline-none focus:ring-2 focus:ring-ring"
             >
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
                 <span className="truncate font-medium">
@@ -202,14 +207,15 @@ export function EventsFilterBar() {
             </button>
             
             {isDropdownOpen && (
-              <div className="absolute top-14 right-0 w-72 bg-card border border-border shadow-2xl rounded-2xl p-2 z-50 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                <button 
-                   onClick={() => handleRegionChange('all')}
-                   className={`w-full flex items-center p-3 rounded-xl text-left text-sm transition-colors ${currentRegionParam === 'all' ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-secondary text-foreground'}`}
-                >
-                  <span className="flex-1">{t('regions.all')}</span>
-                  {currentRegionParam === 'all' && <Check size={16} />}
-                </button>
+              <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-background border border-border/80 shadow-2xl rounded-2xl z-60 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 backdrop-blur-md">
+                <div className="max-h-[350px] overflow-y-auto p-1.5 custom-scrollbar">
+                  <button 
+                     onClick={() => handleRegionChange('all')}
+                     className={`w-full flex items-center p-3 rounded-xl text-left text-sm transition-colors ${currentRegionParam === 'all' ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-secondary text-foreground'}`}
+                  >
+                    <span className="flex-1">{t('regions.all')}</span>
+                    {currentRegionParam === 'all' && <Check size={16} />}
+                  </button>
                 <div className="my-2 border-t border-border/50" />
                 
                 {isDictLoading ? (
@@ -239,27 +245,24 @@ export function EventsFilterBar() {
                     </div>
                   ))
                 )}
+                </div>
               </div>
             )}
           </div>
         </form>
       
-        <div className="flex items-center gap-3 w-full lg:w-auto">
-          <Button variant="outline" className="w-full lg:w-auto rounded-2xl h-12 border-border/50 gap-2 font-semibold hover:bg-secondary">
-            <Filter size={18} />
-            {t('filter')}
-          </Button>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
           <Button 
             onClick={handleCreateEventClick}
-            className="w-full lg:w-auto rounded-2xl h-12 gap-2 font-semibold glow-primary shadow-lg"
+            className="w-full sm:w-auto rounded-xl md:rounded-2xl h-12 gap-2 font-semibold glow-primary shadow-lg px-6"
           >
             {t('createEvent')}
           </Button>
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] p-0 border-none bg-transparent shadow-none" showCloseButton={false}>
-              <div className="bg-background rounded-2xl p-2 md:p-4 shadow-xl border border-border">
+            <DialogContent className="sm:max-w-2xl max-h-[90vh] w-[95vw] p-0 border border-border bg-background rounded-[2rem] shadow-2xl z-[150] overflow-hidden flex flex-col" showCloseButton={false}>
+              <div className="overflow-y-auto flex-1 custom-scrollbar p-1">
                 <EventForm 
-                  className="space-y-6 bg-card/60 backdrop-blur-md p-4 md:p-6 rounded-3xl"
+                  className="space-y-6 p-5 md:p-10"
                   onSuccess={() => setIsModalOpen(false)}
                   onCancel={() => setIsModalOpen(false)}
                 />

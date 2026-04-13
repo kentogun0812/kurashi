@@ -96,7 +96,8 @@
       "kansai": "Kansai (Osaka...)",
       "kyushu": "Kyushu",
       "hokkaido": "Hokkaido"
-    }
+    },
+    "loading": "Đang tải dữ liệu..."
   },
   "common": {
     "language": "Ngôn ngữ"

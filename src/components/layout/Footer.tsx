@@ -9,9 +9,9 @@ export function Footer() {
   const tNav = useTranslations('nav');
 
   return (
-    <footer className="bg-background border-t border-border mt-20 pt-16 pb-8">
+    <footer className="bg-background border-t border-border mt-20 pt-16 pb-12 md:pb-8">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Brand Column */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 group">
@@ -22,7 +22,7 @@ export function Footer() {
                 Kurashi
               </span>
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
               {t('slogan')}
             </p>
             <div className="flex items-center gap-4 mt-2">
@@ -36,17 +36,6 @@ export function Footer() {
                 <Icons.instagram size={20} />
               </Link>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="flex flex-col gap-4">
-            <h4 className="font-semibold text-foreground">{t('features')}</h4>
-            <ul className="flex flex-col gap-2">
-              <li><Link href="/events" className="text-sm text-muted-foreground hover:text-primary transition-colors">{tNav('events')}</Link></li>
-              <li><Link href="/marketplace" className="text-sm text-muted-foreground hover:text-primary transition-colors">{tNav('marketplace')}</Link></li>
-              <li><Link href="/procedures" className="text-sm text-muted-foreground hover:text-primary transition-colors">{tNav('procedures')}</Link></li>
-              <li><Link href="/forum" className="text-sm text-muted-foreground hover:text-primary transition-colors">Forum</Link></li>
-            </ul>
           </div>
 
           {/* Support */}
@@ -81,7 +70,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="pt-8 border-t border-border flex flex-col items-center text-center md:flex-row md:justify-between md:text-left gap-4 mb-4">
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Kurashi. All rights reserved.
           </p>

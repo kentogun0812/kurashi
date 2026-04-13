@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
 import { Mail, Lock, Loader2, AlertCircle } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { checkEmailExists } from './actions';
 import { FullScreenLoading } from '@/components/ui/full-screen-loading';
 
 export default function LoginPage() {
@@ -56,6 +57,13 @@ export default function LoginPage() {
             return;
           }
 
+          // Kiểm tra email đã tồn tại hay chưa
+          const exists = await checkEmailExists(email);
+          if (exists) {
+            setErrorMsg('Email này đã được đăng ký. Vui lòng đăng nhập hoặc sử dụng email khác.');
+            return;
+          }
+
           const randomAva = `/image/ava_${Math.floor(Math.random() * 10) + 1}.jpg`;
           
           const { error, data } = await supabase.auth.signUp({
@@ -89,7 +97,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-20 max-w-md">
+    <div className="container mx-auto px-4 py-10 md:py-20 max-w-md min-h-[calc(100svh-250px)] flex flex-col justify-center">
       {isPending && (
         <FullScreenLoading 
           message={isLogin ? 'Đang đăng nhập...' : 'Đang xử lý đăng ký...'} 
@@ -124,56 +132,63 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleAuth} className="space-y-4">
+          <form onSubmit={handleAuth} className="space-y-5">
+            {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold ml-1">Email</label>
+              </div>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/60" size={18} />
                 <Input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com" 
-                  className="pl-10 h-12 rounded-xl bg-background/50"
+                  className="pl-10 h-13 rounded-2xl bg-secondary/30 border-secondary/50 focus:bg-background transition-all"
                   required
                 />
               </div>
             </div>
 
+            {/* Password Field */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Mật khẩu</label>
+                <label className="text-sm font-semibold ml-1">Mật khẩu</label>
                 {isLogin && (
-                  <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+                  <Link href="/forgot-password" className="text-xs text-primary font-medium hover:underline">
                     Quên mật khẩu?
                   </Link>
                 )}
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/60" size={18} />
                 <Input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••" 
-                  className="pl-10 h-12 rounded-xl bg-background/50"
+                  className="pl-10 h-13 rounded-2xl bg-secondary/30 border-secondary/50 focus:bg-background transition-all"
                   required
                   minLength={6}
                 />
               </div>
             </div>
 
+            {/* Confirm Password Field (Sign up only) */}
             {!isLogin && (
               <div className="space-y-2">
-                <label className="text-sm font-medium">Xác nhận mật khẩu</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold ml-1">Xác nhận mật khẩu</label>
+                </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/60" size={18} />
                   <Input 
                     type="password" 
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••" 
-                    className="pl-10 h-12 rounded-xl bg-background/50"
+                    className="pl-10 h-13 rounded-2xl bg-secondary/30 border-secondary/50 focus:bg-background transition-all"
                     required
                     minLength={6}
                   />
