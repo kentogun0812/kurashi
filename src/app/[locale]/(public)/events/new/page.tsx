@@ -1,4 +1,5 @@
 import { EventForm } from "@/components/events/EventForm";
+import { APP_INFO } from "@/const/type";
 import { getTranslations } from "next-intl/server";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -10,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations({ locale: resolvedParams.locale, namespace: 'events' });
   
   return {
-    title: `Create Event | Kurashi`,
+    title: `Create Event | ${APP_INFO.name}`,
     description: "Share your upcoming event with the community in Japan",
   };
 }

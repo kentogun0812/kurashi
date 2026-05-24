@@ -102,17 +102,8 @@ export function EventsFilterBar() {
     fetchRegions();
   }, [locale]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const currentQ = searchParams.get('q') || '';
-      if (searchTerm !== currentQ) {
-        startTransition(() => {
-          router.push(`${pathname}?${createQueryString('q', searchTerm)}`);
-        });
-      }
-    }, 500); 
-    return () => clearTimeout(timer);
-  }, [searchTerm, pathname, router, searchParams, createQueryString]);
+  // Auto search removed based on user request - search now happens on button click or Enter key
+
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -180,20 +171,9 @@ export function EventsFilterBar() {
         <FullScreenLoading message={t('loading')} />
       )}
       <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 p-4 md:p-5 mb-8 md:mb-10 bg-card/40 backdrop-blur-md rounded-2xl md:rounded-3xl border border-border/50 relative z-40">
-        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row w-full lg:w-2/3 items-stretch sm:items-center gap-3">
-          <div className="relative w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
-            <Input 
-              type="text" 
-              placeholder={t('searchPlaceholder')} 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 bg-background/50 border-border/50 rounded-xl md:rounded-2xl h-12 text-base w-full"
-            />
-          </div>
-          
-          {/* Custom Region Dropdown */}
-          <div className="relative w-full sm:w-64 shrink-0" ref={dropdownRef}>
+        <form id="search-form" onSubmit={handleSearch} className="flex flex-col sm:flex-row w-full lg:flex-1 items-stretch sm:items-center gap-3">
+          {/* Custom Region Dropdown - First on the left */}
+          <div className="relative w-full sm:w-56 shrink-0" ref={dropdownRef}>
             <button 
               type="button" 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -208,7 +188,7 @@ export function EventsFilterBar() {
             
             {isDropdownOpen && (
               <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-background border border-border/80 shadow-2xl rounded-2xl z-60 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 backdrop-blur-md">
-                <div className="max-h-[350px] overflow-y-auto p-1.5 custom-scrollbar">
+                <div className="max-h-[350px] overflow-y-auto p-1.5 custom-scrollbar border-b border-border/50">
                   <button 
                      onClick={() => handleRegionChange('all')}
                      className={`w-full flex items-center p-3 rounded-xl text-left text-sm transition-colors ${currentRegionParam === 'all' ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-secondary text-foreground'}`}
@@ -216,42 +196,59 @@ export function EventsFilterBar() {
                     <span className="flex-1">{t('regions.all')}</span>
                     {currentRegionParam === 'all' && <Check size={16} />}
                   </button>
-                <div className="my-2 border-t border-border/50" />
-                
-                {isDictLoading ? (
-                  <div className="flex justify-center p-4"><Loader2 className="animate-spin text-muted-foreground" /></div>
-                ) : (
-                  Object.values(regionsData).map(({ region, cities }) => (
-                    <div key={region.slug} className="mb-2">
-                      <button
-                        onClick={() => handleRegionChange(region.slug)}
-                        className={`w-full flex items-center p-3 rounded-xl text-left transition-colors group ${currentRegionParam === region.slug ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-secondary/50 text-foreground'}`}
-                      >
-                        <span className="flex-1 font-semibold">{region.name}</span>
-                        {currentRegionParam === region.slug ? <Check size={16} className="text-primary"/> : <ChevronRight size={16} className="text-muted-foreground opacity-30 group-hover:opacity-100" />}
-                      </button>
-                      <div className="ml-4 mt-1 space-y-1 border-l-2 border-secondary pl-2">
-                        {cities.map((city) => (
-                           <button
-                             key={city.slug}
-                             onClick={() => handleRegionChange(city.slug)}
-                             className={`w-full flex items-center p-2 rounded-lg text-left text-sm transition-colors ${currentRegionParam === city.slug ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-secondary text-muted-foreground hover:text-foreground'}`}
-                           >
-                             <span className="flex-1">{city.name}</span>
-                             {currentRegionParam === city.slug && <Check size={14} className="text-primary" />}
-                           </button>
-                        ))}
+                  <div className="my-2 border-t border-border/50" />
+                  
+                  {isDictLoading ? (
+                    <div className="flex justify-center p-4"><Loader2 className="animate-spin text-muted-foreground" /></div>
+                  ) : (
+                    Object.values(regionsData).map(({ region, cities }) => (
+                      <div key={region.slug} className="mb-2">
+                        <button
+                          onClick={() => handleRegionChange(region.slug)}
+                          className={`w-full flex items-center p-3 rounded-xl text-left transition-colors group ${currentRegionParam === region.slug ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-secondary/50 text-foreground'}`}
+                        >
+                          <span className="flex-1 font-semibold">{region.name}</span>
+                          {currentRegionParam === region.slug ? <Check size={16} className="text-primary"/> : <ChevronRight size={16} className="text-muted-foreground opacity-30 group-hover:opacity-100" />}
+                        </button>
+                        <div className="ml-4 mt-1 space-y-1 border-l-2 border-secondary pl-2">
+                          {cities.map((city) => (
+                             <button
+                               key={city.slug}
+                               onClick={() => handleRegionChange(city.slug)}
+                               className={`w-full flex items-center p-2 rounded-lg text-left text-sm transition-colors ${currentRegionParam === city.slug ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-secondary text-muted-foreground hover:text-foreground'}`}
+                             >
+                               <span className="flex-1">{city.name}</span>
+                               {currentRegionParam === city.slug && <Check size={14} className="text-primary" />}
+                             </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
                 </div>
               </div>
             )}
           </div>
+
+          <div className="flex items-center w-full bg-secondary/20 border border-border/40 rounded-xl md:rounded-2xl overflow-hidden focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-primary/40 transition-all duration-300 shadow-inner group">
+            <input 
+              type="text" 
+              placeholder={t('searchPlaceholder')} 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 h-12 bg-transparent pl-4 pr-12 border-none outline-none text-sm text-foreground placeholder-muted-foreground/60"
+            />
+            <button 
+              type="submit"
+              className="w-12 h-12 flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground transition-all shrink-0 border-l border-border/20 rounded-r-xl md:rounded-r-2xl"
+              title={t('search')}
+            >
+              <Search size={20} />
+            </button>
+          </div>
         </form>
       
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+        <div className="flex items-center gap-3 shrink-0">
           <Button 
             onClick={handleCreateEventClick}
             className="w-full sm:w-auto rounded-xl md:rounded-2xl h-12 gap-2 font-semibold glow-primary shadow-lg px-6"
@@ -263,7 +260,12 @@ export function EventsFilterBar() {
               <div className="overflow-y-auto flex-1 custom-scrollbar p-1">
                 <EventForm 
                   className="space-y-6 p-5 md:p-10"
-                  onSuccess={() => setIsModalOpen(false)}
+                  onSuccess={() => {
+                    setIsModalOpen(false);
+                    startTransition(() => {
+                      router.refresh();
+                    });
+                  }}
                   onCancel={() => setIsModalOpen(false)}
                 />
               </div>

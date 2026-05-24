@@ -7,7 +7,7 @@ import { Link } from "@/i18n/routing";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
-import { EventGroupList } from "./EventGroupList";
+import { EventMessagesBoard } from "./EventMessagesBoard";
 
 export default async function EventDetailPage({
   params
@@ -151,16 +151,15 @@ export default async function EventDetailPage({
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold flex items-center gap-2">
                 <MessageSquarePlus className="text-primary" size={20} />
-                Nhóm rủ đi chung
+                Bảng Tin nhắn & Thảo luận
               </h3>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Tìm bạn đồng hành, thảo luận và lên kế hoạch tham gia cùng nhau.
+              Thảo luận, chia sẻ thông tin hoặc tìm bạn đồng hành cùng tham gia sự kiện.
             </p>
             
             <div className="flex-1 overflow-hidden">
-               {/* Lấy và render các nhóm liên quan đến sự kiện này (Client Component) */}
-               <EventGroupList eventId={event.id} />
+               <EventMessagesBoard eventId={event.id} />
             </div>
           </div>
 

@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { EventsFilterBar } from "@/components/events/EventsFilterBar";
 import { EventCategories } from "@/components/events/EventCategories";
 
+export const dynamic = 'force-dynamic';
+
 export default async function EventsPage({
   searchParams
 }: {
@@ -19,7 +21,7 @@ export default async function EventsPage({
   const supabase = await createClient();
   let query = supabase.from('events').select(`
     *,
-    profiles:organizer_id(display_name)
+    profiles(display_name, avatar_url)
   `).order('event_time', { ascending: true }); // sort upcoming
 
   if (category) {
@@ -50,6 +52,10 @@ export default async function EventsPage({
 
   const { data: dbEvents, error } = await query;
   
+  if (error) {
+    console.error('Error fetching events:', error);
+  }
+  
   let events: EventType[] = [];
   
   const categoryMap: Record<string, string> = {
@@ -73,7 +79,8 @@ export default async function EventsPage({
       location: e.location || 'N/A',
       imageUrl: e.image_url,
       attendees: e.attendees_count || 0,
-      organizer: e.organizer_name || e.profiles?.display_name || 'Cộng đồng VN'
+      organizer: e.organizer_name || e.profiles?.display_name || 'Cộng đồng VN',
+      organizerAvatar: e.profiles?.avatar_url
     }));
   }
 
@@ -97,7 +104,7 @@ export default async function EventsPage({
 
       {/* Grid Events */}
       {events.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
           {events.map((event, idx) => (
             <EventCard key={event.id} event={event} priority={idx < 2} />
           ))}

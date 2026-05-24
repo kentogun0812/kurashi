@@ -1,0 +1,63 @@
+name: Sync External Events
+
+on:
+  schedule:
+    # Run every 12 hours (00:00 and 12:00 UTC)
+    - cron: '0 0,12 * * *'
+  
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual sync'
+
+jobs:
+  sync-events:
+    name: Sync Events from Connpass & Peatix
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger Events Sync
+        id: sync
+        run: |
+          echo "🔄 Triggering events sync at $(date -u)"
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.APP_URL }}/api/cron/sync-events")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response: $BODY"
+          
+          # Parse results for summary
+          echo "response_body=$BODY" >> $GITHUB_OUTPUT
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ Sync failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+          
+          echo "✅ Sync completed successfully"
+
+      - name: Log Summary
+        if: always()
+        run: |
+          echo "## Sync Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered at:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "**Reason:** ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.sync.outputs.response_body }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

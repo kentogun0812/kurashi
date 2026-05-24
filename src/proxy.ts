@@ -6,7 +6,7 @@ import { routing } from './i18n/routing';
 
 const handleI18nRouting = createMiddleware(routing);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // 1. Handle i18n routing first
   const i18nResponse = handleI18nRouting(request);
   
@@ -55,9 +55,9 @@ export const config = {
     '/', 
     '/(vi|en|jp)/:path*',
     // Match all request paths except for the ones starting with:
+    // - api, api-docs (API routes and Swagger UI)
     // - _next/static (static files)
     // - _next/image (image optimization files)
-    // - api (API routes)
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|api-docs|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

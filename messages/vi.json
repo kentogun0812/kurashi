@@ -97,7 +97,11 @@
       "kyushu": "Kyushu",
       "hokkaido": "Hokkaido"
     },
-    "loading": "Đang tải dữ liệu..."
+    "loading": "Đang tải dữ liệu...",
+    "search": "Tìm kiếm",
+    "cancel": "Hủy bỏ",
+    "create": "Tạo sự kiện",
+    "processing": "Đang xử lý..."
   },
   "common": {
     "language": "Ngôn ngữ"
@@ -132,5 +136,30 @@
     "pwdMismatch": "Mật khẩu mới không khớp.",
     "uploadError": "Lỗi tải ảnh. Vui lòng thử lại.",
     "systemError": "Lỗi hệ thống, vui lòng thử lại."
+  },
+  "procedures": {
+    "title": "Thủ tục",
+    "titleHighlight": "Hành chính",
+    "description": "Hướng dẫn chi tiết, chính xác các thủ tục hành chính, pháp lý và cuộc sống cần thiết cho người Việt khi sinh sống, học tập và làm việc tại Nhật Bản.",
+    "searchPlaceholder": "Tìm kiếm thủ tục (ví dụ: visa, chuyển nhà...)",
+    "categories": {
+      "all": "Tất cả",
+      "visa": "Visa & Tư cách lưu trú",
+      "moving": "Chuyển nhà & Đăng ký địa chỉ",
+      "working": "Lao động & Việc làm",
+      "marriage": "Hôn nhân & Gia đình",
+      "tax_insurance": "Thuế & Bảo hiểm",
+      "daily_life": "Đời sống"
+    },
+    "loading": "Đang tải dữ liệu...",
+    "noResults": "Không tìm thấy thủ tục nào",
+    "noResultsDesc": "Thử thay đổi từ khóa tìm kiếm hoặc chọn danh mục khác nhé.",
+    "lastVerified": "Cập nhật mới nhất: {date}",
+    "backToList": "Quay lại danh sách",
+    "tableOfContents": "Mục lục",
+    "steps": "Quy trình thực hiện",
+    "requiredDocs": "Giấy tờ cần chuẩn bị",
+    "stepCount": "Bước {number}",
+    "verified": "Đã xác minh"
   }
 }

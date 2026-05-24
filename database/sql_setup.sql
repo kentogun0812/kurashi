@@ -1,12 +1,12 @@
 -- ==========================================
--- NIHONSEIKATSU - FULL DATABASE SETUP (CONSOLIDATED)
+-- KURASHI - FULL DATABASE SETUP (REFACTORED)
 -- ==========================================
 
 -- 0. EXTENSIONS
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- ==========================================
--- 1. USER & PROFILES
+-- 1. USER PROFILE
 -- ==========================================
 
 CREATE TABLE IF NOT EXISTS public.profiles (
@@ -22,10 +22,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Toggle RLS
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- Policies
 DROP POLICY IF EXISTS "Public Read Profiles" ON public.profiles;
 CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
 
@@ -64,7 +62,7 @@ CREATE TABLE IF NOT EXISTS public.events (
   location TEXT,
   source TEXT NOT NULL CHECK (source IN ('peatix', 'connpass', 'user')),
   image_url TEXT NOT NULL,
-  organizer_id UUID REFERENCES auth.users(id),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   organizer_name TEXT,
   original_url TEXT,
   attendees_count INTEGER DEFAULT 0,
@@ -77,31 +75,23 @@ DROP POLICY IF EXISTS "Public Read Events" ON public.events;
 CREATE POLICY "Public Read Events" ON public.events FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Users can create events" ON public.events;
-CREATE POLICY "Users can create events" ON public.events FOR INSERT TO authenticated WITH CHECK (auth.uid() = organizer_id AND source = 'user');
+CREATE POLICY "Users can create events" ON public.events FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id AND source = 'user');
 
--- Tables for Discussion
-CREATE TABLE IF NOT EXISTS public.event_groups (
+-- Tables for Discussion (Simplified: Removed event_groups)
+CREATE TABLE IF NOT EXISTS public.event_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  description TEXT,
-  created_by UUID REFERENCES auth.users(id),
-  member_count INTEGER DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-ALTER TABLE public.event_groups ENABLE ROW LEVEL SECURITY;
-
-CREATE TABLE IF NOT EXISTS public.group_messages (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  group_id UUID REFERENCES public.event_groups(id) ON DELETE CASCADE,
-  sender_id UUID REFERENCES auth.users(id),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-ALTER TABLE public.group_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.event_messages ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "Users can manage own messages" ON public.group_messages;
-CREATE POLICY "Users can manage own messages" ON public.group_messages FOR ALL TO authenticated USING (auth.uid() = sender_id);
+DROP POLICY IF EXISTS "Public Read Messages" ON public.event_messages;
+CREATE POLICY "Public Read Messages" ON public.event_messages FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Users can manage own messages" ON public.event_messages;
+CREATE POLICY "Users can manage own messages" ON public.event_messages FOR ALL TO authenticated USING (auth.uid() = user_id);
 
 -- ==========================================
 -- 3. ADMINISTRATIVE HUB
@@ -146,7 +136,7 @@ CREATE TABLE IF NOT EXISTS public.guide_embeddings (
 
 CREATE TABLE IF NOT EXISTS public.marketplace_listings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  seller_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
   price INTEGER NOT NULL DEFAULT 0,
@@ -162,7 +152,7 @@ DROP POLICY IF EXISTS "Public Read Marketplace Listings" ON public.marketplace_l
 CREATE POLICY "Public Read Marketplace Listings" ON public.marketplace_listings FOR SELECT USING (status = 'active');
 
 DROP POLICY IF EXISTS "Users can create listings" ON public.marketplace_listings;
-CREATE POLICY "Users can create listings" ON public.marketplace_listings FOR INSERT TO authenticated WITH CHECK (auth.uid() = seller_id);
+CREATE POLICY "Users can create listings" ON public.marketplace_listings FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
 
 CREATE TABLE IF NOT EXISTS public.listing_images (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -174,15 +164,15 @@ CREATE TABLE IF NOT EXISTS public.listing_images (
 
 CREATE TABLE IF NOT EXISTS public.user_reviews (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  reviewer_id UUID REFERENCES auth.users(id),
-  reviewed_user_id UUID REFERENCES auth.users(id),
+  reviewer_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  reviewed_user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   comment TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- ==========================================
--- 5. REGIONS DATA (Japan Prefectures)
+-- 5. REGIONS DATA
 -- ==========================================
 
 CREATE TABLE IF NOT EXISTS public.regions (
@@ -222,24 +212,20 @@ ON CONFLICT (slug) DO NOTHING;
 -- 6. STORAGE SETUP
 -- ==========================================
 
--- Tạo bucket 'events'
 INSERT INTO storage.buckets (id, name, public) 
 VALUES ('events', 'events', true)
 ON CONFLICT (id) DO NOTHING;
 
-CREATE POLICY "Public Read Events Banner" 
-ON storage.objects FOR SELECT 
-USING (bucket_id = 'events');
+DROP POLICY IF EXISTS "Public Read Events Banner" ON storage.objects;
+CREATE POLICY "Public Read Events Banner" ON storage.objects FOR SELECT USING (bucket_id = 'events');
 
-CREATE POLICY "Authenticated Upload Events Banner" 
-ON storage.objects FOR INSERT TO authenticated 
-WITH CHECK (bucket_id = 'events');
+DROP POLICY IF EXISTS "Authenticated Upload Events Banner" ON storage.objects;
+CREATE POLICY "Authenticated Upload Events Banner" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'events');
 
 -- ==========================================
 -- 7. CUSTOM RPC FUNCTIONS
 -- ==========================================
 
--- Hàm kiểm tra email tồn tại (Dành cho signup check)
 CREATE OR REPLACE FUNCTION check_email_exists(email_to_check TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
@@ -252,6 +238,29 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ==========================================
 
 CREATE INDEX IF NOT EXISTS idx_events_event_time ON public.events(event_time);
+CREATE INDEX IF NOT EXISTS idx_events_user_id ON public.events(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_events_original_url ON public.events(original_url) WHERE original_url IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_administrative_guides_slug ON public.administrative_guides(slug);
 CREATE INDEX IF NOT EXISTS idx_marketplace_listings_status ON public.marketplace_listings(status);
 CREATE INDEX IF NOT EXISTS idx_profiles_email ON public.profiles(email);
+
+-- ==========================================
+-- 9. PERMISSIONS (GRANTS)
+-- ==========================================
+
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+
+-- Ensure tables are accessible
+GRANT ALL ON TABLE public.profiles TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.events TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.event_messages TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.administrative_guides TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.administrative_steps TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.guide_embeddings TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.marketplace_listings TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.listing_images TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.user_reviews TO postgres, anon, authenticated, service_role;
+GRANT ALL ON TABLE public.regions TO postgres, anon, authenticated, service_role;
+
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO postgres, anon, authenticated, service_role;

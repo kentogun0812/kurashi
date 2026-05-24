@@ -21,6 +21,7 @@ import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
+import { APP_INFO } from "@/const/type";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -74,9 +75,9 @@ export function Navbar() {
   };
 
   const navLinks = [
+    { id: "procedures", name: t("procedures"), href: "/procedures", icon: FileText },
     { id: "events", name: t("events"), href: "/events", icon: Calendar },
     { id: "marketplace", name: t("marketplace"), href: "/marketplace", icon: ShoppingBag },
-    { id: "procedures", name: t("procedures"), href: "/procedures", icon: FileText },
   ];
 
   useEffect(() => {
@@ -116,10 +117,10 @@ export function Navbar() {
               className="flex items-center gap-2 group transition-transform hover:scale-105"
             >
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center glow-primary">
-                <span className="text-white font-bold text-xl">N</span>
+                <span className="text-white font-bold text-xl">{APP_INFO.name.charAt(0)}</span>
               </div>
               <span className="text-2xl font-extrabold tracking-tight text-gradient hidden sm:block">
-                Kurashi
+                {APP_INFO.name}
               </span>
             </Link>
 
@@ -227,9 +228,9 @@ export function Navbar() {
               className="flex items-center gap-2"
             >
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
+                <span className="text-white font-bold text-xl">{APP_INFO.name.charAt(0)}</span>
               </div>
-              <span className="text-xl font-bold text-gradient">Kurashi</span>
+              <span className="text-xl font-bold text-gradient">{APP_INFO.name}</span>
             </Link>
             <button
               className="p-2 text-foreground"

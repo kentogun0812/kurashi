@@ -10,6 +10,7 @@ import { Mail, Lock, Loader2, AlertCircle } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { checkEmailExists } from './actions';
 import { FullScreenLoading } from '@/components/ui/full-screen-loading';
+import { APP_INFO } from '@/const/type';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -115,7 +116,7 @@ export default function LoginPage() {
               {isLogin ? 'Đăng Nhập' : 'Tạo Tài Khoản'}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {isLogin ? 'Chào mừng bạn quay trở lại Kurashi' : 'Tham gia cộng đồng người Việt tại Nhật'}
+              {isLogin ? `Chào mừng bạn quay trở lại ${APP_INFO.name}` : 'Tham gia cộng đồng người Việt tại Nhật'}
             </p>
           </div>
 

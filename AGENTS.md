@@ -6,7 +6,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ---
 
-# Kurashi (nihonseikatsu) — AI Agent Rules
+# Kurashi — AI Agent Rules
 
 > **Project:** Community platform for Vietnamese residents in Japan  
 > **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Base-Nova style, Base-UI) · Supabase (Auth, DB, Storage) · next-intl v4 · Vercel  

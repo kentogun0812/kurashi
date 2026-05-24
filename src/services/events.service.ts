@@ -9,7 +9,7 @@ export interface EventData {
   location: string;
   source: 'peatix' | 'connpass' | 'user';
   image_url: string;
-  organizer_id?: string;
+  user_id?: string;
   organizer_name?: string;
   original_url?: string;
   attendees_count?: number;

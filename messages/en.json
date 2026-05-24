@@ -97,7 +97,11 @@
       "kyushu": "Kyushu",
       "hokkaido": "Hokkaido"
     },
-    "loading": "Loading data..."
+    "loading": "Loading data...",
+    "search": "Search",
+    "cancel": "Cancel",
+    "create": "Create Event",
+    "processing": "Processing..."
   },
   "common": {
     "language": "Language"
@@ -132,5 +136,30 @@
     "pwdMismatch": "Passwords do not match.",
     "uploadError": "Upload failed. Try again.",
     "systemError": "System error, please try again."
+  },
+  "procedures": {
+    "title": "Administrative",
+    "titleHighlight": "Procedures",
+    "description": "Detailed and accurate guides on administrative, legal, and daily life procedures required for Vietnamese living, studying, and working in Japan.",
+    "searchPlaceholder": "Search procedures (e.g., visa, moving...)",
+    "categories": {
+      "all": "All",
+      "visa": "Visa & Status of Residence",
+      "moving": "Moving & Residence Registration",
+      "working": "Labor & Employment",
+      "marriage": "Marriage & Family",
+      "tax_insurance": "Tax & Insurance",
+      "daily_life": "Daily Life"
+    },
+    "loading": "Loading data...",
+    "noResults": "No procedures found",
+    "noResultsDesc": "Try changing your search keywords or choosing a different category.",
+    "lastVerified": "Last updated: {date}",
+    "backToList": "Back to list",
+    "tableOfContents": "Table of Contents",
+    "steps": "Execution Steps",
+    "requiredDocs": "Required Documents",
+    "stepCount": "Step {number}",
+    "verified": "Verified"
   }
 }

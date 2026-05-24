@@ -132,5 +132,30 @@
     "pwdMismatch": "パスワードが一致しません。",
     "uploadError": "アップロード失敗。再試行してください。",
     "systemError": "システムエラー。再試行してください。"
+  },
+  "procedures": {
+    "title": "行政",
+    "titleHighlight": "手続き",
+    "description": "日本での生活、学習、労働に必要な行政、法律、日常生活の手続きに関する詳細で正確なガイド。",
+    "searchPlaceholder": "手続きを検索 (例: ビザ、引っ越し...)",
+    "categories": {
+      "all": "すべて",
+      "visa": "ビザ・在留資格",
+      "moving": "転居・住民登録",
+      "working": "労働・雇用",
+      "marriage": "結婚・家族",
+      "tax_insurance": "税金・保険",
+      "daily_life": "日常生活"
+    },
+    "loading": "データを読み込み中...",
+    "noResults": "手続きが見つかりません",
+    "noResultsDesc": "検索キーワードを変更するか、別のカテゴリを選択してください。",
+    "lastVerified": "最終更新日: {date}",
+    "backToList": "リストに戻る",
+    "tableOfContents": "目次",
+    "steps": "実施ステップ",
+    "requiredDocs": "必要な書類",
+    "stepCount": "ステップ {number}",
+    "verified": "確認済み"
   }
 }
