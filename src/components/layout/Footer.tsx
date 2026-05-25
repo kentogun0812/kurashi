@@ -1,5 +1,5 @@
 "use client";
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Icons } from "@/components/ui/icons";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,12 @@ import { APP_INFO, CONTACT_INFO, SOCIAL_LINKS } from "@/const/type";
 export function Footer() {
   const t = useTranslations('footer');
   const tNav = useTranslations('nav');
+  const pathname = usePathname();
+
+  // Hide Footer on Admin pages
+  if (pathname.includes('/admin')) {
+    return null;
+  }
 
   return (
     <footer className="bg-background border-t border-border mt-20 pt-16 pb-12 md:pb-8">
@@ -26,24 +32,24 @@ export function Footer() {
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
               {t('slogan')}
             </p>
-            <div className="flex items-center gap-4 mt-2">
+            {/* <div className="flex items-center gap-4 mt-2">
               <Link href={SOCIAL_LINKS.facebook} className="text-muted-foreground hover:text-primary transition-colors">
                 <Icons.facebook size={20} />
               </Link>
               <Link href={SOCIAL_LINKS.twitter} className="text-muted-foreground hover:text-primary transition-colors">
                 <Icons.twitter size={20} />
               </Link>
-              {/* <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
                 <Icons.instagram size={20} />
-              </Link> */}
-            </div>
+              </Link>
+            </div> */}
           </div>
 
           {/* Support */}
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold text-foreground">{t('support')}</h4>
             <ul className="flex flex-col gap-2">
-              <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
+              {/* <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li> */}
               <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
               <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">Terms of Use</Link></li>

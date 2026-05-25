@@ -1,9 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { ProcedureCard, ProcedureType } from "@/components/procedures/ProcedureCard";
+import { ProcedureType } from "@/components/procedures/ProcedureCard";
+import { ProcedureListItem } from "@/components/procedures/ProcedureListItem";
 import { ProcedureSearch } from "@/components/procedures/ProcedureSearch";
 import { ProcedureCategories } from "@/components/procedures/ProcedureCategories";
-import { FileText, Inbox } from "lucide-react";
+import { FileText, Inbox, ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
@@ -116,23 +118,26 @@ export default async function ProceduresPage({
                   <h2 className="text-xl md:text-2xl font-bold text-foreground">
                     {categoryMap[catKey] || catKey}
                   </h2>
-                  <span className="text-xs font-semibold text-muted-foreground bg-secondary px-2.5 py-1 rounded-full">
-                    {items.length}
-                  </span>
+                  {items.length > 3 && (
+                    <Link href={`/procedures?category=${catKey}`} className="ml-auto text-sm font-semibold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
+                      <span>{t("viewMore")}</span>
+                      <ArrowRight size={16} />
+                    </Link>
+                  )}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {items.map((proc) => (
-                    <ProcedureCard key={proc.id} procedure={proc} />
+                <div className="flex flex-col gap-3 md:gap-4">
+                  {items.slice(0, 3).map((proc) => (
+                    <ProcedureListItem key={proc.id} procedure={proc} />
                   ))}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          // Flat Grid Layout (when filtering or searching)
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-300">
+          // Flat List Layout (when filtering or searching)
+          <div className="flex flex-col gap-3 md:gap-4 animate-in fade-in duration-300">
             {procedures.map((proc) => (
-              <ProcedureCard key={proc.id} procedure={proc} />
+              <ProcedureListItem key={proc.id} procedure={proc} />
             ))}
           </div>
         )

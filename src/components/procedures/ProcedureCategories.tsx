@@ -43,7 +43,7 @@ export function ProcedureCategories() {
   return (
     <>
       {isPending && <FullScreenLoading message={t("loading")} />}
-      <div className="flex overflow-x-auto gap-3 pb-4 mb-8 scrollbar-hide relative z-10 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-4 pb-4 mb-8 relative z-10 w-full">
         {categories.map((cat) => {
           const isActive = currentCategoryKey === (cat.queryValue || "all");
           return (

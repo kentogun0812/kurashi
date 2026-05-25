@@ -100,6 +100,11 @@ export function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
+  // Hide Navbar on Admin pages
+  if (pathname.includes('/admin')) {
+    return null;
+  }
+
   return (
     <>
       {isLoggingOut && (

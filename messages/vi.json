@@ -149,7 +149,7 @@
       "working": "Lao động & Việc làm",
       "marriage": "Hôn nhân & Gia đình",
       "tax_insurance": "Thuế & Bảo hiểm",
-      "daily_life": "Đời sống"
+      "daily_life": "Cuộc sống"
     },
     "loading": "Đang tải dữ liệu...",
     "noResults": "Không tìm thấy thủ tục nào",
@@ -160,6 +160,6 @@
     "steps": "Quy trình thực hiện",
     "requiredDocs": "Giấy tờ cần chuẩn bị",
     "stepCount": "Bước {number}",
-    "verified": "Đã xác minh"
+    "viewMore": "Xem thêm"
   }
 }

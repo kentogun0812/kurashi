@@ -6,6 +6,7 @@ import { Outfit } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { MainWrapper } from "@/components/layout/MainWrapper";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -53,9 +54,9 @@ export default async function LocaleLayout({
       <body className={`${outfit.variable} font-sans min-h-screen bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary transition-colors flex flex-col`}>
         <NextIntlClientProvider messages={messages}>
           <Navbar />
-          <main className="flex-1 pt-[50px] md:pt-[60px] pb-12">
+          <MainWrapper>
             {children}
-          </main>
+          </MainWrapper>
           <Footer />
         </NextIntlClientProvider>
       </body>

@@ -36,25 +36,25 @@ export function ProcedureSearch() {
   return (
     <form
       onSubmit={handleSearch}
-      className="relative flex items-center w-full bg-secondary/20 border border-border/40 rounded-2xl overflow-hidden focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-primary/40 transition-all duration-300 shadow-inner group"
+      className="relative flex items-center w-full bg-background border-2 border-primary/20 rounded-2xl overflow-hidden focus-within:ring-4 focus-within:ring-primary/20 focus-within:border-primary transition-all duration-300 shadow-sm hover:shadow-md group"
     >
       <input
         type="text"
         placeholder={t("searchPlaceholder")}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="flex-1 h-14 bg-transparent pl-5 pr-14 border-none outline-none text-sm md:text-base text-foreground placeholder-muted-foreground/60"
+        className="flex-1 h-14 md:h-16 bg-transparent pl-5 md:pl-6 pr-14 border-none outline-none text-base md:text-lg font-medium text-foreground placeholder-muted-foreground/70"
       />
       <button
         type="submit"
         disabled={isPending}
-        className="w-14 h-14 flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground transition-all shrink-0 border-l border-border/20 rounded-r-2xl"
+        className="w-14 md:w-16 h-14 md:h-16 flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground transition-all shrink-0 border-l border-primary/20"
         title={t("searchPlaceholder")}
       >
         {isPending ? (
-          <Loader2 className="h-5 w-5 animate-spin" />
+          <Loader2 className="h-6 w-6 animate-spin" />
         ) : (
-          <Search size={20} />
+          <Search size={24} className="group-focus-within:scale-110 transition-transform duration-300" />
         )}
       </button>
     </form>

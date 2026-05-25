@@ -2,16 +2,11 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { 
-  ArrowLeft, 
-  Calendar, 
-  CheckCircle, 
-  FileText, 
-  ChevronRight, 
-  ClipboardList, 
-  FolderOpen 
-} from "lucide-react";
+import { ArrowLeft, Calendar, FileText, ChevronRight, ClipboardList, FolderOpen } from "lucide-react";
 import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -23,108 +18,12 @@ interface Step {
   required_documents: string[];
 }
 
-// Simple safe markdown parser helper that returns React nodes directly without dangerouslySetInnerHTML
-function parseBold(text: string): React.ReactNode[] {
-  const parts = text.split("**");
-  return parts.map((part, i) => {
-    if (i % 2 === 1) {
-      return (
-        <strong key={i} className="font-bold text-foreground">
-          {part}
-        </strong>
-      );
-    }
-    return part;
-  });
-}
-
-function renderMarkdown(content: string) {
-  if (!content) return null;
-
-  const lines = content.split("\n");
-  let inList = false;
-  const listItems: React.ReactNode[] = [];
-  const elements: React.ReactNode[] = [];
-
-  const flushList = (key: string) => {
-    if (inList && listItems.length > 0) {
-      elements.push(
-        <ul key={`list-${key}`} className="list-disc pl-6 my-4 space-y-2 text-muted-foreground leading-relaxed text-sm md:text-base">
-          {[...listItems]}
-        </ul>
-      );
-      listItems.length = 0;
-      inList = false;
-    }
-  };
-
-  lines.forEach((line, index) => {
-    const trimmed = line.trim();
-
-    // Horizontal rule
-    if (trimmed === "---") {
-      flushList(`hr-${index}`);
-      elements.push(<hr key={`hr-${index}`} className="my-6 border-border" />);
-      return;
-    }
-
-    // Headers
-    if (trimmed.startsWith("## ")) {
-      flushList(`h2-${index}`);
-      const text = parseBold(trimmed.substring(3));
-      elements.push(
-        <h3 key={`h2-${index}`} className="text-xl md:text-2xl font-bold text-foreground mt-8 mb-4 border-l-4 border-primary pl-3">
-          {text}
-        </h3>
-      );
-      return;
-    }
-
-    if (trimmed.startsWith("### ")) {
-      flushList(`h3-${index}`);
-      const text = parseBold(trimmed.substring(4));
-      elements.push(
-        <h4 key={`h3-${index}`} className="text-base md:text-lg font-bold text-foreground mt-6 mb-3">
-          {text}
-        </h4>
-      );
-      return;
-    }
-
-    // Bullet lists
-    if (trimmed.startsWith("- ")) {
-      inList = true;
-      const text = parseBold(trimmed.substring(2));
-      listItems.push(<li key={`li-${index}`}>{text}</li>);
-      return;
-    }
-
-    // Paragraph or empty line
-    if (trimmed === "") {
-      flushList(`empty-${index}`);
-    } else {
-      if (inList) {
-        flushList(`flush-${index}`);
-      }
-      const text = parseBold(trimmed);
-      elements.push(
-        <p key={`p-${index}`} className="text-muted-foreground leading-relaxed my-4 text-sm md:text-base">
-          {text}
-        </p>
-      );
-    }
-  });
-
-  flushList("end");
-  return <div className="space-y-1">{elements}</div>;
-}
-
 export default async function ProcedureDetailPage({
   params,
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const t = await getTranslations("procedures");
 
   // Fetch guide detail from Supabase
@@ -139,6 +38,11 @@ export default async function ProcedureDetailPage({
     console.error("Error fetching guide:", guideError);
     notFound();
   }
+
+  // Handle Multi-language content
+  const title = locale === "en" && guide.title_en ? guide.title_en : locale === "jp" && guide.title_jp ? guide.title_jp : guide.title;
+  const summary = locale === "en" && guide.summary_en ? guide.summary_en : locale === "jp" && guide.summary_jp ? guide.summary_jp : guide.summary;
+  const contentMd = locale === "en" && guide.content_md_en ? guide.content_md_en : locale === "jp" && guide.content_md_jp ? guide.content_md_jp : guide.content_md;
 
   // Fetch steps
   const { data: stepsData, error: stepsError } = await supabase
@@ -177,6 +81,21 @@ export default async function ProcedureDetailPage({
       })
     : "N/A";
 
+  // Markdown custom renderers
+  const MarkdownComponents = {
+    img: ({ node, ...props }: any) => (
+      <span className="relative block w-full h-[300px] md:h-[400px] my-6">
+        <Image
+          src={props.src || ""}
+          alt={props.alt || "Procedure image"}
+          fill
+          className="object-contain rounded-lg"
+          sizes="(max-width: 768px) 100vw, 800px"
+        />
+      </span>
+    ),
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
       {/* Back Button */}
@@ -204,19 +123,15 @@ export default async function ProcedureDetailPage({
                 <Calendar size={13} />
                 <span>{t("lastVerified", { date: formattedDate })}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-full">
-                <CheckCircle size={12} />
-                <span>{t("verified")}</span>
-              </span>
             </div>
             
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
-              {guide.title}
+              {title}
             </h1>
             
-            {guide.summary && (
+            {summary && (
               <p className="text-base md:text-lg text-muted-foreground border-l-4 border-border pl-4 italic">
-                {guide.summary}
+                {summary}
               </p>
             )}
           </div>
@@ -224,8 +139,14 @@ export default async function ProcedureDetailPage({
           <hr className="border-border/50" />
 
           {/* Guide Markdown Content */}
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            {renderMarkdown(guide.content_md)}
+          <div className="prose prose-slate dark:prose-invert prose-img:rounded-xl prose-headings:text-foreground prose-a:text-primary max-w-none">
+            {contentMd ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
+                {contentMd}
+              </ReactMarkdown>
+            ) : (
+              <p className="text-muted-foreground italic">Nội dung đang được cập nhật...</p>
+            )}
           </div>
 
           {/* Steps Section */}
@@ -241,23 +162,19 @@ export default async function ProcedureDetailPage({
               <div className="relative border-l border-border/80 pl-6 md:pl-8 ml-3 md:ml-4 space-y-12">
                 {steps.map((step, idx) => (
                   <div key={step.id} className="relative group">
-                    {/* Circle timeline pin */}
                     <div className="absolute -left-[35px] md:-left-[43px] top-1.5 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full border-2 border-primary bg-background text-xs md:text-sm font-bold text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground shadow-md">
                       {step.step_number}
                     </div>
 
-                    {/* Step Title */}
                     <div className="space-y-3">
                       <h3 className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                         {step.title}
                       </h3>
                       
-                      {/* Step Description */}
                       <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                         {step.description}
                       </p>
 
-                      {/* Required Documents */}
                       {step.required_documents.length > 0 && (
                         <div className="mt-4 rounded-xl border border-border bg-secondary/20 p-4 animate-in fade-in duration-300">
                           <h4 className="mb-3 flex items-center gap-2 text-xs md:text-sm font-bold text-foreground">

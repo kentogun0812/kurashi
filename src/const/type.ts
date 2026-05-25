@@ -5,8 +5,8 @@ export const APP_INFO = {
 
 export const CONTACT_INFO = {
   address: "Tokyo, Japan",
-  phone: "+81 90-XXXX-XXXX",
-  email: "contact@kurashi.vn",
+  phone: "+81 70-6450-4890",
+  email: "infisoftdev@gmail.com",
 };
 
 export const SOCIAL_LINKS = {
