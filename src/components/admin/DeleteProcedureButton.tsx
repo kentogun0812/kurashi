@@ -67,7 +67,7 @@ export function DeleteProcedureButton({ id }: { id: string }) {
           </div>
           <DialogTitle className="text-center">{t("deleteConfirm")}</DialogTitle>
           <DialogDescription className="text-center mt-2">
-            Hành động này không thể hoàn tác. Dữ liệu bài viết này sẽ bị xóa vĩnh viễn khỏi hệ thống.
+            {t("deleteWarning")}
           </DialogDescription>
         </DialogHeader>
         
@@ -75,7 +75,7 @@ export function DeleteProcedureButton({ id }: { id: string }) {
           <DialogClose 
             render={<Button variant="outline" type="button" disabled={isDeleting} className="min-w-[100px] h-10" />} 
           >
-            Hủy
+            {t("cancel")}
           </DialogClose>
           <Button 
             variant="destructive" 
@@ -84,7 +84,7 @@ export function DeleteProcedureButton({ id }: { id: string }) {
             className="min-w-[100px] h-10"
           >
             {isDeleting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Xóa
+            {t("delete")}
           </Button>
         </DialogFooter>
       </DialogContent>

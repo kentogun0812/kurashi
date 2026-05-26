@@ -199,7 +199,10 @@
         "success": "Cập nhật bài viết thành công!",
         "fetchError": "Lỗi khi tải dữ liệu bài viết:",
         "notFound": "Không tìm thấy bài viết"
-      }
+      },
+      "deleteWarning": "Hành động này không thể hoàn tác. Dữ liệu bài viết này sẽ bị xóa vĩnh viễn khỏi hệ thống.",
+      "cancel": "Hủy",
+      "delete": "Xóa"
     }
   }
 }
