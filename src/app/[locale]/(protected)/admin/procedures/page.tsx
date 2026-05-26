@@ -1,32 +1,52 @@
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/i18n/routing";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit } from "lucide-react";
+import { getTranslations, getLocale } from "next-intl/server";
+import { AdminSearchInput } from "@/components/admin/AdminSearchInput";
+import { DeleteProcedureButton } from "@/components/admin/DeleteProcedureButton";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminProceduresPage() {
+export default async function AdminProceduresPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const supabase = await createClient();
+  const t = await getTranslations("admin.procedures");
+  const tCommon = await getTranslations("common");
+  const locale = await getLocale();
+  const sp = await searchParams;
+  const q = typeof sp.q === "string" ? sp.q : "";
   
   // Fetch procedures
-  const { data: procedures, error } = await supabase
+  let query = supabase
     .from("administrative_guides")
     .select("id, title, slug, category, last_verified_at")
     .order("last_verified_at", { ascending: false });
+
+  if (q) {
+    query = query.or(`title.ilike.%${q}%,summary.ilike.%${q}%`);
+  }
+
+  const { data: procedures, error } = await query;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Quản lý Thủ tục</h1>
-          <p className="text-muted-foreground text-sm">Quản lý danh sách các bài viết hướng dẫn hành chính</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
         </div>
-        <Link 
-          href="/admin/procedures/create"
-          className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-        >
-          <Plus size={18} />
-          Tạo bài viết mới
-        </Link>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+          <AdminSearchInput />
+          <Link 
+            href="/admin/procedures/create"
+            className="inline-flex h-11 items-center justify-center gap-2 bg-primary text-primary-foreground px-5 rounded-xl font-medium hover:bg-primary/90 transition-colors whitespace-nowrap shadow-sm"
+          >
+            <Plus size={18} />
+            {t("create")}
+          </Link>
+        </div>
       </div>
 
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
@@ -34,10 +54,10 @@ export default async function AdminProceduresPage() {
           <table className="w-full text-left text-sm">
             <thead className="bg-secondary/50 text-muted-foreground border-b border-border">
               <tr>
-                <th className="px-6 py-3 font-semibold">Tiêu đề</th>
-                <th className="px-6 py-3 font-semibold">Danh mục</th>
-                <th className="px-6 py-3 font-semibold">Cập nhật lần cuối</th>
-                <th className="px-6 py-3 font-semibold text-right">Thao tác</th>
+                <th className="px-6 py-3 font-semibold">{t("list.title")}</th>
+                <th className="px-6 py-3 font-semibold">{t("list.category")}</th>
+                <th className="px-6 py-3 font-semibold">{t("list.lastUpdated")}</th>
+                <th className="px-6 py-3 font-semibold text-right">{t("list.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -53,7 +73,7 @@ export default async function AdminProceduresPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-muted-foreground">
-                      {proc.last_verified_at ? new Date(proc.last_verified_at).toLocaleDateString("vi-VN") : "N/A"}
+                      {proc.last_verified_at ? new Date(proc.last_verified_at).toLocaleDateString(locale) : tCommon("na")}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -64,12 +84,7 @@ export default async function AdminProceduresPage() {
                         >
                           <Edit size={16} />
                         </Link>
-                        <button 
-                          className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                          title="Xóa"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteProcedureButton id={proc.id} />
                       </div>
                     </td>
                   </tr>
@@ -77,7 +92,7 @@ export default async function AdminProceduresPage() {
               ) : (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
-                    Chưa có bài viết nào.
+                    {t("list.empty")}
                   </td>
                 </tr>
               )}

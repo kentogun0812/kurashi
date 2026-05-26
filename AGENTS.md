@@ -59,7 +59,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
   - **DO** use `useTranslations()` in client components and `getTranslations()` in server components.
   - **DO** add keys to ALL three locale files when introducing new UI text.
   - **DO** use `Link` / `useRouter` / `usePathname` / `redirect` from `@/i18n/routing`, NOT from `next/link` or `next/navigation`.
-  - **DON'T** hardcode user-facing strings in components. Every visible string must go through i18n.
+  - **DON'T** hardcode user-facing strings in components. Every visible string must go through i18n, even in Admin screens.
+  - **Admin Screens**: For screens under `(protected)/admin`, only declare the i18n message variables in the Vietnamese locale file (`messages/vi.json`), as the admin interface is only accessed in Vietnamese. Do not add them to EN/JP files.
   - **Internal data values** (DB enums, filter keys) must remain in English. Only UI labels are localized.
 
 ---

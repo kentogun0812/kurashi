@@ -45,7 +45,7 @@ export function ProcedureEditor({ value, onChange }: ProcedureEditorProps) {
 
     if (error) {
       console.error("Error uploading image:", error);
-      alert("Có lỗi khi tải ảnh lên. Vui lòng thử lại.");
+      alert("Error uploading image. Please try again.");
       throw error;
     }
 

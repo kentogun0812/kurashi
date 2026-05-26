@@ -112,7 +112,7 @@ export default async function EventDetailPage({
               <div>
                 <h3 className="text-xl font-bold mb-3">Giới thiệu sự kiện</h3>
                 <div className="prose dark:prose-invert max-w-none text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                  {event.description || 'Chưa có mô tả chi tiết cho sự kiện này.'}
+                  {event.description}
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ProcedureType } from "@/components/procedures/ProcedureCard";
 import { ProcedureListItem } from "@/components/procedures/ProcedureListItem";
@@ -15,6 +15,8 @@ export default async function ProceduresPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const t = await getTranslations("procedures");
+  const tCommon = await getTranslations("common");
+  const locale = await getLocale();
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
   const category = typeof sp.category === "string" ? sp.category : "";
@@ -57,12 +59,12 @@ export default async function ProceduresPage({
       categoryName: categoryMap[g.category] || g.category,
       summary: g.summary || "",
       lastVerifiedAt: g.last_verified_at
-        ? new Date(g.last_verified_at).toLocaleDateString("vi-VN", {
+        ? new Date(g.last_verified_at).toLocaleDateString(locale, {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
           })
-        : "N/A",
+        : tCommon("na"),
     }));
   }
 

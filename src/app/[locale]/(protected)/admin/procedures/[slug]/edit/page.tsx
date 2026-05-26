@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { createClient } from "@/lib/supabase/client";
 import dynamic from "next/dynamic";
 const ProcedureEditor = dynamic(() => import("@/components/admin/ProcedureEditor").then(mod => mod.ProcedureEditor), { ssr: false });
@@ -10,15 +10,20 @@ import { useTranslations } from "next-intl";
 
 type Locale = "vi" | "en" | "jp";
 
-export default function CreateProcedurePage() {
+export default function EditProcedurePage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
+  const resolvedParams = use(params);
+  const slug = resolvedParams.slug;
   const t = useTranslations("procedures.categories");
-  const tAdmin = useTranslations("admin.procedures.createPage");
+  const tAdmin = useTranslations("admin.procedures");
+  const supabase = createClient();
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [activeTab, setActiveTab] = useState<Locale>("vi");
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [procedureId, setProcedureId] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -48,6 +53,40 @@ export default function CreateProcedurePage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    async function fetchProcedure() {
+      try {
+        const { data, error } = await supabase
+          .from("administrative_guides")
+          .select("*")
+          .eq("slug", slug)
+          .single();
+
+        if (error) throw error;
+        if (data) {
+          setProcedureId(data.id);
+          setFormData({
+            slug: data.slug,
+            category: data.category,
+            title: { vi: data.title || "", en: data.title_en || "", jp: data.title_jp || "" },
+            summary: { vi: data.summary || "", en: data.summary_en || "", jp: data.summary_jp || "" },
+            content: { vi: data.content_md || "", en: data.content_md_en || "", jp: data.content_md_jp || "" },
+          });
+        }
+      } catch (err: any) {
+        console.error("Error fetching procedure:", err);
+        alert(`${tAdmin("editPage.fetchError")} ${err.message}`);
+        router.push("/admin/procedures");
+      } finally {
+        setIsFetching(false);
+      }
+    }
+
+    if (slug) {
+      fetchProcedure();
+    }
+  }, [slug, supabase, router, tAdmin]);
+
   const handleTextChange = (locale: Locale, field: "title" | "summary", value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -68,44 +107,50 @@ export default function CreateProcedurePage() {
       alert("Please fill in at least the Title, Slug, and Content for the primary language (vi)!");
       return;
     }
+    
+    if (!procedureId) return;
 
     setIsSubmitting(true);
     try {
-      // 1. Validate Duplicate Slug
-      const { data: existingSlug } = await supabase
-        .from("administrative_guides")
-        .select("id")
-        .eq("slug", formData.slug)
-        .single();
-        
-      if (existingSlug) {
-        alert("This slug already exists. Please choose a unique slug.");
-        setIsSubmitting(false);
-        return;
+      // 1. Validate Duplicate Slug (ignore if it's the current procedure's slug)
+      if (formData.slug !== slug) {
+        const { data: existingSlug } = await supabase
+          .from("administrative_guides")
+          .select("id")
+          .eq("slug", formData.slug)
+          .single();
+          
+        if (existingSlug) {
+          alert("This slug already exists. Please choose a unique slug.");
+          setIsSubmitting(false);
+          return;
+        }
       }
 
-      // 2. Insert Data
-      const { error } = await supabase.from("administrative_guides").insert({
-        slug: formData.slug,
-        category: formData.category,
-        title: formData.title.vi,
-        title_en: formData.title.en,
-        title_jp: formData.title.jp,
-        summary: formData.summary.vi,
-        summary_en: formData.summary.en,
-        summary_jp: formData.summary.jp,
-        content_md: formData.content.vi,
-        content_md_en: formData.content.en,
-        content_md_jp: formData.content.jp,
-      });
+      // 2. Update Data
+      const { error } = await supabase.from("administrative_guides")
+        .update({
+          slug: formData.slug,
+          category: formData.category,
+          title: formData.title.vi,
+          title_en: formData.title.en,
+          title_jp: formData.title.jp,
+          summary: formData.summary.vi,
+          summary_en: formData.summary.en,
+          summary_jp: formData.summary.jp,
+          content_md: formData.content.vi,
+          content_md_en: formData.content.en,
+          content_md_jp: formData.content.jp,
+        })
+        .eq("id", procedureId);
 
       if (error) throw error;
       
-      alert("Procedure created successfully!");
+      alert(tAdmin("editPage.success"));
       router.push("/admin/procedures");
       router.refresh();
     } catch (error: any) {
-      console.error("Error creating procedure:", error);
+      console.error("Error updating procedure:", error);
       alert(`Error: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -118,6 +163,14 @@ export default function CreateProcedurePage() {
     { id: "jp", label: "日本語" },
   ];
 
+  if (isFetching) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="animate-spin text-primary" size={32} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full space-y-6 pb-20">
       <div className="flex items-center justify-between">
@@ -125,7 +178,7 @@ export default function CreateProcedurePage() {
           <Link href="/admin/procedures" className="p-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors">
             <ArrowLeft size={20} />
           </Link>
-          <h1 className="text-2xl font-bold text-foreground">{tAdmin("title")}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{tAdmin("editPage.title")}</h1>
         </div>
         <button
           type="button"
@@ -134,7 +187,7 @@ export default function CreateProcedurePage() {
           className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
         >
           {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-          {tAdmin("submit")}
+          {tAdmin("editPage.submit")}
         </button>
       </div>
 
@@ -144,26 +197,26 @@ export default function CreateProcedurePage() {
           <div className="bg-card border border-border p-6 rounded-2xl shadow-sm space-y-6">
             <h3 className="font-semibold text-foreground flex items-center gap-2 text-lg">
               <Globe size={20} className="text-primary" />
-              {tAdmin("settings")}
+              {tAdmin("createPage.settings")}
             </h3>
             
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-foreground">{tAdmin("slug")}</label>
+              <label className="text-sm font-semibold text-foreground">{tAdmin("createPage.slug")}</label>
               <input
                 type="text"
                 required
                 value={formData.slug}
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') }))}
-                placeholder={tAdmin("slugPlaceholder")}
+                placeholder={tAdmin("createPage.slugPlaceholder")}
                 className="w-full h-12 px-4 rounded-xl border border-border/60 bg-secondary/20 focus:bg-background focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
               />
               <p className="text-xs text-muted-foreground leading-relaxed">
-                {tAdmin("slugDesc")}
+                {tAdmin("createPage.slugDesc")}
               </p>
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-foreground">{tAdmin("category")}</label>
+              <label className="text-sm font-semibold text-foreground">{tAdmin("createPage.category")}</label>
               
               {/* Custom Modern Dropdown */}
               <div className="relative w-full" ref={dropdownRef}>
@@ -229,22 +282,22 @@ export default function CreateProcedurePage() {
           {/* Form Content per Locale */}
           <div className="p-6 md:p-8 space-y-8 flex-1 bg-background">
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-foreground">{tAdmin("articleTitle")}</label>
+              <label className="text-sm font-semibold text-foreground">{tAdmin("createPage.articleTitle")}</label>
               <input
                 type="text"
                 value={formData.title[activeTab]}
                 onChange={(e) => handleTextChange(activeTab, "title", e.target.value)}
-                placeholder={`${tAdmin("articleTitlePlaceholder")} (${activeTab.toUpperCase()})`}
+                placeholder={`${tAdmin("createPage.articleTitlePlaceholder")} (${activeTab.toUpperCase()})`}
                 className="w-full h-12 px-4 rounded-xl border border-border/60 bg-secondary/10 focus:bg-background focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-lg font-semibold"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-foreground">{tAdmin("summary")}</label>
+              <label className="text-sm font-semibold text-foreground">{tAdmin("createPage.summary")}</label>
               <textarea
                 value={formData.summary[activeTab]}
                 onChange={(e) => handleTextChange(activeTab, "summary", e.target.value)}
-                placeholder={tAdmin("summaryPlaceholder")}
+                placeholder={tAdmin("createPage.summaryPlaceholder")}
                 rows={3}
                 className="w-full p-4 rounded-xl border border-border/60 bg-secondary/10 focus:bg-background focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none leading-relaxed"
               />
@@ -252,7 +305,7 @@ export default function CreateProcedurePage() {
 
             <div className="space-y-3">
               <label className="text-sm font-semibold text-foreground flex items-center justify-between">
-                <span>{tAdmin("content")}</span>
+                <span>{tAdmin("createPage.content")}</span>
               </label>
               {/* Force re-render of ProcedureEditor when activeTab changes to prevent cache bugs */}
               <div key={activeTab}>

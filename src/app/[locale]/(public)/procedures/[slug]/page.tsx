@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/routing";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowLeft, Calendar, FileText, ChevronRight, ClipboardList, FolderOpen } from "lucide-react";
 import React from "react";
@@ -74,7 +74,7 @@ export default async function ProcedureDetailPage({
   };
 
   const formattedDate = guide.last_verified_at
-    ? new Date(guide.last_verified_at).toLocaleDateString("vi-VN", {
+    ? new Date(guide.last_verified_at).toLocaleDateString(locale, {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",

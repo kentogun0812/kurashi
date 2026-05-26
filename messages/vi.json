@@ -104,7 +104,8 @@
     "processing": "Đang xử lý..."
   },
   "common": {
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "na": "N/A"
   },
   "footer": {
     "slogan": "Hệ sinh thái thông tin hành chính, kết nối cộng đồng và giao thương đồ cũ hàng đầu cho người Việt tại Nhật Bản.",
@@ -161,5 +162,44 @@
     "requiredDocs": "Giấy tờ cần chuẩn bị",
     "stepCount": "Bước {number}",
     "viewMore": "Xem thêm"
+  },
+  "admin": {
+    "procedures": {
+      "title": "Quản lý Thủ tục",
+      "create": "Tạo bài viết mới",
+      "list": {
+        "title": "Tiêu đề",
+        "category": "Danh mục",
+        "lastUpdated": "Cập nhật lần cuối",
+        "actions": "Thao tác",
+        "empty": "Chưa có bài viết nào."
+      },
+      "createPage": {
+        "title": "Tạo Bài viết mới",
+        "submit": "Lưu bài viết",
+        "settings": "Cài đặt chung",
+        "slug": "URL Slug (Đường dẫn)",
+        "slugPlaceholder": "VD: dang-ky-visa-kisu",
+        "slugDesc": "Dùng tiếng Việt không dấu, nối nhau bằng dấu gạch ngang (chỉ chứa a-z, 0-9 và -).",
+        "category": "Danh mục",
+        "articleTitle": "Tiêu đề bài viết",
+        "articleTitlePlaceholder": "Nhập tiêu đề",
+        "summary": "Tóm tắt ngắn (Summary)",
+        "summaryPlaceholder": "Tóm tắt nội dung chính sẽ hiển thị ở đầu trang...",
+        "content": "Nội dung chi tiết (Markdown)"
+      },
+      "searchPlaceholder": "Tìm kiếm thủ tục...",
+      "deleteConfirm": "Bạn có chắc chắn muốn xóa thủ tục này?",
+      "deleteSuccess": "Xóa thủ tục thành công!",
+      "deleteError": "Lỗi khi xóa thủ tục:",
+      "editPage": {
+        "title": "Chỉnh sửa Bài viết",
+        "desc": "Cập nhật nội dung thủ tục hành chính",
+        "submit": "Cập nhật bài viết",
+        "success": "Cập nhật bài viết thành công!",
+        "fetchError": "Lỗi khi tải dữ liệu bài viết:",
+        "notFound": "Không tìm thấy bài viết"
+      }
+    }
   }
 }
