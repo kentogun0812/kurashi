@@ -145,8 +145,6 @@ export default function EditProcedurePage({ params }: { params: Promise<{ slug: 
         .eq("id", procedureId);
 
       if (error) throw error;
-      
-      alert(tAdmin("editPage.success"));
       router.push("/admin/procedures");
       router.refresh();
     } catch (error: any) {

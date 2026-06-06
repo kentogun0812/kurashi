@@ -100,8 +100,6 @@ export default function CreateProcedurePage() {
       });
 
       if (error) throw error;
-      
-      alert("Procedure created successfully!");
       router.push("/admin/procedures");
       router.refresh();
     } catch (error: any) {

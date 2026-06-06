@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/routing";
+import Link from "next/link";
 import { getTranslations, getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowLeft, Calendar, FileText, ChevronRight, ClipboardList, FolderOpen } from "lucide-react";
@@ -101,7 +101,7 @@ export default async function ProcedureDetailPage({
       {/* Back Button */}
       <div className="mb-6">
         <Link
-          href="/procedures"
+          href={`/${locale}/procedures`}
           className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-primary transition-colors group"
         >
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
@@ -109,10 +109,8 @@ export default async function ProcedureDetailPage({
         </Link>
       </div>
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-12">
-        {/* Left column: main content (3/4 on desktop) */}
-        <div className="lg:col-span-3 space-y-8 md:space-y-12">
+      {/* Main Content Layout */}
+      <div className="space-y-8 md:space-y-12 w-full">
           {/* Header Info */}
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -200,41 +198,6 @@ export default async function ProcedureDetailPage({
               </div>
             </div>
           )}
-        </div>
-
-        {/* Right column: Sticky Navigation / TOC (1/4 on desktop) */}
-        <div className="hidden lg:block lg:col-span-1">
-          <div className="sticky top-[100px] space-y-6">
-            <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 shadow-sm space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                {t("tableOfContents")}
-              </h3>
-              
-              <nav className="space-y-1.5">
-                <a
-                  href="#"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  <ChevronRight size={14} className="text-primary" />
-                  <span>Giới thiệu</span>
-                </a>
-                
-                {steps.map((step) => (
-                  <a
-                    key={step.id}
-                    href={`#step-${step.step_number}`}
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                  >
-                    <span className="text-xs font-bold text-primary w-4">
-                      {step.step_number}.
-                    </span>
-                    <span className="truncate">{step.title}</span>
-                  </a>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

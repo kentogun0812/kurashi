@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Settings, FileText, Users, LayoutDashboard, LogOut } from "lucide-react";
 import { APP_INFO } from "@/const/type";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default function AdminLayout({
   children,
@@ -10,12 +11,7 @@ export default function AdminLayout({
 }) {
   const t = useTranslations("common");
 
-  const menuItems = [
-    { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
-    { href: "/admin/procedures", icon: FileText, label: "Procedures" },
-    { href: "/admin/users", icon: Users, label: "Users" },
-    { href: "/admin/settings", icon: Settings, label: "Settings" },
-  ];
+
 
   return (
     <div className="flex min-h-screen bg-secondary/20">
@@ -42,23 +38,7 @@ export default function AdminLayout({
       </header>
 
       {/* Admin Sidebar (Fixed) */}
-      <aside className="fixed top-[64px] md:top-[72px] bottom-0 left-0 w-64 bg-card border-r border-border hidden md:flex flex-col overflow-y-auto z-40">
-        <nav className="flex-1 py-6 px-4 space-y-1.5">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-              >
-                <Icon size={20} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </aside>
+      <AdminSidebar />
 
       {/* Admin Main Content */}
       <main className="flex-1 pt-[64px] md:pt-[72px] md:pl-64 flex flex-col min-h-screen w-full">

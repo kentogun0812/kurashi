@@ -16,7 +16,7 @@
     "description": "Cung cấp thông tin hành chính, sự kiện và chợ đồ cũ cho người Việt đang sinh sống tại Nhật Bản."
   },
   "home": {
-    "greeting": "Chào buổi sáng, Dũng! 👋",
+    "greeting": "Xin chào, {name}! 👋",
     "subGreeting": "Hôm nay bạn cần hỗ trợ thông tin gì tại Nhật Bản?",
     "aiSearchPlaceholder": "Hỏi AI: Xin thủ tục chuyển nhà...",
     "sections": {
@@ -164,6 +164,7 @@
     "viewMore": "Xem thêm"
   },
   "admin": {
+    "dashboard": "Dashboard",
     "procedures": {
       "title": "Quản lý Thủ tục",
       "create": "Tạo bài viết mới",
@@ -180,7 +181,7 @@
         "settings": "Cài đặt chung",
         "slug": "URL Slug (Đường dẫn)",
         "slugPlaceholder": "VD: dang-ky-visa-kisu",
-        "slugDesc": "Dùng tiếng Việt không dấu, nối nhau bằng dấu gạch ngang (chỉ chứa a-z, 0-9 và -).",
+        "slugDesc": "Dùng ký tự không dấu, nối nhau bằng dấu gạch ngang (chỉ chứa a-z, 0-9 và -)",
         "category": "Danh mục",
         "articleTitle": "Tiêu đề bài viết",
         "articleTitlePlaceholder": "Nhập tiêu đề",
@@ -203,6 +204,14 @@
       "deleteWarning": "Hành động này không thể hoàn tác. Dữ liệu bài viết này sẽ bị xóa vĩnh viễn khỏi hệ thống.",
       "cancel": "Hủy",
       "delete": "Xóa"
-    }
+    },
+  "tips": {
+    "title": "Mẹo hay",
+    "titleHighlight": "Cuộc sống",
+    "description": "Tổng hợp những kinh nghiệm, mẹo vặt hữu ích giúp cuộc sống tại Nhật Bản của bạn trở nên dễ dàng và thuận tiện hơn.",
+    "searchPlaceholder": "Tìm kiếm mẹo (ví dụ: tiết kiệm điện, vứt rác...)",
+    "noResults": "Không tìm thấy mẹo nào",
+    "noResultsDesc": "Thử thay đổi từ khóa tìm kiếm xem sao nhé.",
+    "backToList": "Quay lại danh sách"
   }
 }

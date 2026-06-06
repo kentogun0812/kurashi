@@ -16,7 +16,7 @@
     "description": "Providing administrative info, events, and C2C marketplace for Vietnamese living in Japan."
   },
   "home": {
-    "greeting": "Good morning, Dung! 👋",
+    "greeting": "Hello, {name}! 👋",
     "subGreeting": "How can we help you today in Japan?",
     "aiSearchPlaceholder": "Ask AI: Moving procedures...",
     "sections": {
@@ -102,6 +102,15 @@
     "cancel": "Cancel",
     "create": "Create Event",
     "processing": "Processing..."
+  },
+  "tips": {
+    "title": "Life",
+    "titleHighlight": "Tips",
+    "description": "Collection of useful tips and experiences to make your life in Japan easier and more convenient.",
+    "searchPlaceholder": "Search tips (e.g., saving electricity, garbage sorting...)",
+    "noResults": "No tips found",
+    "noResultsDesc": "Try changing your search keywords.",
+    "backToList": "Back to list"
   },
   "common": {
     "language": "Language"

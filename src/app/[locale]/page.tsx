@@ -1,14 +1,51 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { EventCard } from '@/components/events/EventCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, FileText, ArrowRight, Lightbulb, Search, Calendar } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { getPopularProcedures } from '@/services/procedures.service';
+import { getPopularTips } from '@/services/tips.service';
+import { createClient } from '@/lib/supabase/server';
 
-export default function Home() {
-  const t = useTranslations('home');
-  const tNav = useTranslations('nav');
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const t = await getTranslations('home');
+  const tNav = await getTranslations('nav');
+  
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let displayName = locale === 'vi' ? 'Bạn' : locale === 'jp' ? 'ゲスト' : 'Guest';
+  
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('display_name, email')
+      .eq('id', user.id)
+      .single();
+      
+    if (profile?.display_name) {
+      displayName = profile.display_name;
+    } else if (profile?.email) {
+      displayName = profile.email.split('@')[0];
+    }
+  }
+
+  const procedures = await getPopularProcedures(4);
+  const tips = await getPopularTips(4);
+
+  const getCategoryColor = (category: string) => {
+    switch (category?.toLowerCase()) {
+      case 'visa': return 'bg-blue-500/10 text-blue-500';
+      case 'moving': return 'bg-purple-500/10 text-purple-500';
+      case 'working': return 'bg-emerald-500/10 text-emerald-500';
+      case 'marriage': return 'bg-pink-500/10 text-pink-500';
+      case 'tax_insurance': return 'bg-amber-500/10 text-amber-500';
+      default: return 'bg-secondary text-secondary-foreground';
+    }
+  };
 
   const mockEvents = [
     {
@@ -39,7 +76,7 @@ export default function Home() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 bg-gradient-to-br from-card to-background p-6 md:p-8 rounded-3xl border border-border/60 shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] rounded-full -mr-20 -mt-20 pointer-events-none" />
         <div className="relative z-10">
-          <h1 className="text-3xl font-bold mb-2">{t('greeting')}</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('greeting', { name: displayName })}</h1>
           <p className="text-muted-foreground">{t('subGreeting')}</p>
         </div>
         <div className="w-full md:w-[450px] relative group">
@@ -76,23 +113,24 @@ export default function Home() {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {[
-                { id: 'visa', color: 'bg-blue-500/10 text-blue-500' },
-                { id: 'move', color: 'bg-green-500/10 text-green-500' },
-                { id: 'quit', color: 'bg-orange-500/10 text-orange-500' },
-                { id: 'marriage', color: 'bg-rose-500/10 text-rose-500' },
-              ].map((item) => (
-                <Card key={item.id} className="group hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer rounded-3xl overflow-hidden border-border/50 bg-card/60 backdrop-blur-sm">
-                  <CardContent className="p-6 flex items-start gap-5">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${item.color}`}>
-                      <FileText size={26} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">{t(`proceduresItems.${item.id}.title` as any)}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{t(`proceduresItems.${item.id}.desc` as any)}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+              {procedures.map((proc) => (
+                <Link href={`/procedures/${proc.slug}`} key={proc.id} className="block">
+                  <Card className="group h-full hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer rounded-3xl overflow-hidden border-border/50 bg-card/60 backdrop-blur-sm">
+                    <CardContent className="p-6 flex items-start gap-5">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${getCategoryColor(proc.category)}`}>
+                        <FileText size={26} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors line-clamp-2" title={proc.title}>
+                          {proc.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed truncate">
+                          {proc.summary}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
           </section>
@@ -131,21 +169,29 @@ export default function Home() {
               {t('sections.tips')}
             </h2>
             <div className="space-y-3">
-              {[0, 1, 2, 3].map((idx) => (
-                <div key={idx} className="group flex gap-4 p-4 rounded-2xl border border-transparent hover:border-border/50 hover:bg-secondary/50 transition-colors cursor-pointer">
-                  <div className="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-600 flex items-center justify-center shrink-0 font-bold text-lg group-hover:scale-110 transition-transform">
-                    {idx + 1}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm mb-1 group-hover:text-primary transition-colors">{t(`tipsItems.${idx}.title` as any)}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{t(`tipsItems.${idx}.desc` as any)}</p>
-                  </div>
-                </div>
-              ))}
+              {tips.map((tip, idx) => {
+                const tipTitle = locale === 'en' && tip.title_en ? tip.title_en : locale === 'jp' && tip.title_jp ? tip.title_jp : tip.title;
+                const tipSummary = locale === 'en' && tip.summary_en ? tip.summary_en : locale === 'jp' && tip.summary_jp ? tip.summary_jp : tip.summary;
+                return (
+                  <Link href={`/tips/${tip.slug}`} key={tip.id} className="block">
+                    <div className="group flex gap-4 p-4 rounded-2xl border border-transparent hover:border-border/50 hover:bg-secondary/50 transition-colors cursor-pointer">
+                      <div className="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-600 flex items-center justify-center shrink-0 font-bold text-lg group-hover:scale-110 transition-transform">
+                        {idx + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-sm mb-1 group-hover:text-primary transition-colors truncate" title={tipTitle}>{tipTitle}</h4>
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{tipSummary}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            <Button variant="ghost" className="w-full mt-4 text-primary font-semibold">
-              {t('viewAll')}
-            </Button>
+            <Link href="/tips" className="block w-full mt-4">
+              <Button variant="ghost" className="w-full text-primary font-semibold">
+                {t('viewAll')}
+              </Button>
+            </Link>
           </section>
 
           {/* Nền tảng Chợ */}
